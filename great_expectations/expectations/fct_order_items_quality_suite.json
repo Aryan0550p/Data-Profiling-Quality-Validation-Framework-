@@ -1,0 +1,95 @@
+{
+  "expectation_suite_name": "fct_order_items_quality_suite",
+  "data_asset_type": "Dataset",
+  "meta": {
+    "great_expectations_version": "0.18.12",
+    "dataset_name": "fct_order_items",
+    "target_columns": 8,
+    "description": "Automated Great Expectations suite for fct_order_items"
+  },
+  "expectations": [
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "item_id"
+      },
+      "meta": {
+        "dimension": "completeness",
+        "severity": "CRITICAL",
+        "description": "Line Item ID cannot be null"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "item_id"
+      },
+      "meta": {
+        "dimension": "consistency",
+        "severity": "CRITICAL",
+        "description": "Item ID must be unique primary key"
+      }
+    },
+    {
+      "expectation_type": "expect_foreign_key_to_exist",
+      "kwargs": {
+        "column": "product_id",
+        "reference_dataset": "dim_products",
+        "reference_column": "product_id"
+      },
+      "meta": {
+        "dimension": "consistency",
+        "severity": "CRITICAL",
+        "issue_id": "ISSUE-07",
+        "impacted_team": "Financial & Revenue Analytics",
+        "description": "Order items product_id must exist in active product catalog master"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "quantity",
+        "min_value": 1,
+        "max_value": 100
+      },
+      "meta": {
+        "dimension": "accuracy",
+        "severity": "CRITICAL",
+        "issue_id": "ISSUE-13",
+        "impacted_team": "Financial & Revenue Analytics",
+        "description": "Item quantity must be strictly positive (no negative returns in sales ledger)"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "discount_rate",
+        "min_value": 0.0,
+        "max_value": 1.0
+      },
+      "meta": {
+        "dimension": "accuracy",
+        "severity": "HIGH",
+        "issue_id": "ISSUE-14",
+        "impacted_team": "Financial & Revenue Analytics",
+        "description": "Discount rate must be bounded between 0% and 100% (0.0 to 1.0)"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "fulfillment_status",
+        "value_set": [
+          "Fulfilled",
+          "Backordered",
+          "Cancelled"
+        ]
+      },
+      "meta": {
+        "dimension": "accuracy",
+        "severity": "MEDIUM",
+        "description": "Fulfillment status must match allowed lifecycle codes"
+      }
+    }
+  ]
+}

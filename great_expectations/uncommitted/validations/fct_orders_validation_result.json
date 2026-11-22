@@ -1,0 +1,228 @@
+{
+  "evaluation_parameters": {},
+  "meta": {
+    "expectation_suite_name": "fct_orders_quality_suite",
+    "run_id": "RUN-20261122T132543Z",
+    "dataset_name": "fct_orders",
+    "validation_time": "2026-11-22T13:25:43.930628"
+  },
+  "success": false,
+  "statistics": {
+    "evaluated_expectations": 9,
+    "successful_expectations": 4,
+    "unsuccessful_expectations": 5,
+    "success_percent": 44.44
+  },
+  "results": [
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "column": "order_id"
+        },
+        "meta": {
+          "dimension": "completeness",
+          "severity": "CRITICAL",
+          "description": "Order ID must not be null"
+        }
+      },
+      "result": {
+        "element_count": 5000,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "5000/5000 non-null"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_unique",
+        "kwargs": {
+          "column": "order_id"
+        },
+        "meta": {
+          "dimension": "consistency",
+          "severity": "CRITICAL",
+          "description": "Order ID must be unique primary key"
+        }
+      },
+      "result": {
+        "element_count": 5000,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "5000 unique of 5000"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "column": "customer_id"
+        },
+        "meta": {
+          "dimension": "completeness",
+          "severity": "CRITICAL",
+          "issue_id": "ISSUE-02",
+          "impacted_team": "Marketing & Growth Analytics",
+          "description": "Orders must be associated with a valid customer_id"
+        }
+      },
+      "result": {
+        "element_count": 5000,
+        "unexpected_count": 200,
+        "unexpected_percent": 4.0,
+        "observed_value": "4800/5000 non-null"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_foreign_key_to_exist",
+        "kwargs": {
+          "column": "customer_id",
+          "reference_dataset": "dim_customers",
+          "reference_column": "customer_id"
+        },
+        "meta": {
+          "dimension": "consistency",
+          "severity": "CRITICAL",
+          "description": "Order customer_id must exist in dim_customers master"
+        }
+      },
+      "result": {
+        "element_count": 5000,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "0 orphan foreign keys"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "column": "currency",
+          "value_set": [
+            "USD"
+          ]
+        },
+        "meta": {
+          "dimension": "consistency",
+          "severity": "MEDIUM",
+          "issue_id": "ISSUE-09",
+          "impacted_team": "Financial & Revenue Analytics",
+          "description": "Order currency must be standardized to ISO-4217 uppercase 'USD'"
+        }
+      },
+      "result": {
+        "element_count": 5000,
+        "unexpected_count": 185,
+        "unexpected_percent": 3.7,
+        "observed_value": "185 unexpected values outside allowed set"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "column": "total_amount",
+          "min_value": 0.01,
+          "max_value": 25000.0
+        },
+        "meta": {
+          "dimension": "distribution",
+          "severity": "CRITICAL",
+          "issue_id": "ISSUE-19",
+          "impacted_team": "Financial & Revenue Analytics",
+          "description": "Order total must be free of extreme synthetic QA test amounts ($9,999,999)"
+        }
+      },
+      "result": {
+        "element_count": 5000,
+        "unexpected_count": 3,
+        "unexpected_percent": 0.06,
+        "observed_value": "3 values outside bounds [0.01, 25000.0]"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_column_distribution_anomaly_check",
+        "kwargs": {
+          "column": "discount_amount",
+          "anomaly_value": 0.01,
+          "max_allowed_ratio": 0.02
+        },
+        "meta": {
+          "dimension": "distribution",
+          "severity": "MEDIUM",
+          "issue_id": "ISSUE-23",
+          "impacted_team": "Financial & Revenue Analytics",
+          "description": "Discount amount must not exhibit rounding clusters of $0.01"
+        }
+      },
+      "result": {
+        "element_count": 5000,
+        "unexpected_count": 480,
+        "unexpected_percent": 9.6,
+        "observed_value": "Spike ratio: 9.6% (limit: 2.0%)"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_cross_table_status_concordance",
+        "kwargs": {
+          "order_status_column": "order_status",
+          "shipment_dataset": "fct_shipments",
+          "disallowed_order_status": "Cancelled",
+          "conflicting_shipping_status": "Delivered"
+        },
+        "meta": {
+          "dimension": "consistency",
+          "severity": "HIGH",
+          "issue_id": "ISSUE-08",
+          "impacted_team": "Supply Chain & Operations Analytics",
+          "description": "Cancelled orders must not have conflicting Delivered status in shipments"
+        }
+      },
+      "result": {
+        "element_count": 5000,
+        "unexpected_count": 244,
+        "unexpected_percent": 5.08,
+        "observed_value": "244 conflicting records"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "column": "order_status",
+          "value_set": [
+            "Delivered",
+            "Shipped",
+            "Processing",
+            "Pending",
+            "Cancelled",
+            "Refunded"
+          ]
+        },
+        "meta": {
+          "dimension": "accuracy",
+          "severity": "HIGH",
+          "description": "Order status must be within the supported lifecycle states"
+        }
+      },
+      "result": {
+        "element_count": 5000,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "0 unexpected values outside allowed set"
+      }
+    }
+  ]
+}

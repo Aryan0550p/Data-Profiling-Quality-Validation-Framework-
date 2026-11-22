@@ -1,0 +1,194 @@
+/* ==============================================================================
+   Power BI DAX Measures Repository: Data Profiling & Quality Framework
+   Tracks 6 Quality KPIs, Dimension Health, Issue Severities, and Status Colors
+   ============================================================================== */
+
+// ------------------------------------------------------------------------------
+// 1. CORE QUALITY KPIS
+// ------------------------------------------------------------------------------
+
+// KPI 1: Overall Data Quality Index (Weighted composite of 4 dimensions + SLA)
+Overall_DQ_Index = 
+VAR CompScore = [Completeness_Pct]
+VAR ConsScore = [Consistency_Pct]
+VAR AccScore  = [Accuracy_Pct]
+VAR DistScore = [Distribution_Health_Pct]
+VAR FreshScore = [Freshness_SLA_Pct]
+RETURN
+    ROUND(
+        (0.30 * CompScore) +
+        (0.25 * ConsScore) +
+        (0.25 * AccScore)  +
+        (0.15 * DistScore) +
+        (0.05 * FreshScore),
+        2
+    )
+
+// KPI 2: Completeness Rate %
+Completeness_Pct = 
+VAR TotalCompRules = CALCULATE(COUNTROWS(fact_dq_validation_results), fact_dq_validation_results[dimension] = "completeness")
+VAR PassedCompRules = CALCULATE(COUNTROWS(fact_dq_validation_results), fact_dq_validation_results[dimension] = "completeness", fact_dq_validation_results[is_success] = TRUE())
+RETURN
+    IF(
+        TotalCompRules > 0,
+        ROUND(DIVIDE(PassedCompRules, TotalCompRules, 1.0) * 100, 2),
+        100.0
+    )
+
+// KPI 3: Consistency & Referential Integrity Rate %
+Consistency_Pct = 
+VAR TotalConsRules = CALCULATE(COUNTROWS(fact_dq_validation_results), fact_dq_validation_results[dimension] = "consistency")
+VAR PassedConsRules = CALCULATE(COUNTROWS(fact_dq_validation_results), fact_dq_validation_results[dimension] = "consistency", fact_dq_validation_results[is_success] = TRUE())
+RETURN
+    IF(
+        TotalConsRules > 0,
+        ROUND(DIVIDE(PassedConsRules, TotalConsRules, 1.0) * 100, 2),
+        100.0
+    )
+
+// KPI 4: Accuracy & Validity Rate %
+Accuracy_Pct = 
+VAR TotalAccRules = CALCULATE(COUNTROWS(fact_dq_validation_results), fact_dq_validation_results[dimension] = "accuracy")
+VAR PassedAccRules = CALCULATE(COUNTROWS(fact_dq_validation_results), fact_dq_validation_results[dimension] = "accuracy", fact_dq_validation_results[is_success] = TRUE())
+RETURN
+    IF(
+        TotalAccRules > 0,
+        ROUND(DIVIDE(PassedAccRules, TotalAccRules, 1.0) * 100, 2),
+        100.0
+    )
+
+// KPI 5: Distribution & Statistical Health Score %
+Distribution_Health_Pct = 
+VAR TotalDistRules = CALCULATE(COUNTROWS(fact_dq_validation_results), fact_dq_validation_results[dimension] = "distribution")
+VAR PassedDistRules = CALCULATE(COUNTROWS(fact_dq_validation_results), fact_dq_validation_results[dimension] = "distribution", fact_dq_validation_results[is_success] = TRUE())
+RETURN
+    IF(
+        TotalDistRules > 0,
+        ROUND(DIVIDE(PassedDistRules, TotalDistRules, 1.0) * 100, 2),
+        100.0
+    )
+
+// KPI 6: Freshness & Timeliness SLA Compliance Rate %
+Freshness_SLA_Pct = 
+CALCULATE(
+    AVERAGE(fact_dq_kpis[actual_value]),
+    fact_dq_kpis[kpi_code] = "FRESHNESS_SLA"
+)
+
+// ------------------------------------------------------------------------------
+// 2. EXECUTIVE COUNTS & OPERATIONAL METRICS
+// ------------------------------------------------------------------------------
+
+Total_Rules_Evaluated = 
+COUNTROWS(fact_dq_validation_results)
+
+Total_Rules_Passed = 
+CALCULATE(
+    COUNTROWS(fact_dq_validation_results),
+    fact_dq_validation_results[is_success] = TRUE()
+)
+
+Total_Rules_Failed = 
+CALCULATE(
+    COUNTROWS(fact_dq_validation_results),
+    fact_dq_validation_results[is_success] = FALSE()
+)
+
+Rules_Pass_Rate_Pct = 
+DIVIDE([Total_Rules_Passed], [Total_Rules_Evaluated], 0) * 100
+
+Total_Flagged_Issues = 
+DISTINCTCOUNT(dim_dq_issues[issue_id])
+
+Critical_Issues_Count = 
+CALCULATE(
+    DISTINCTCOUNT(dim_dq_issues[issue_id]),
+    dim_dq_issues[severity] = "CRITICAL"
+)
+
+High_Issues_Count = 
+CALCULATE(
+    DISTINCTCOUNT(dim_dq_issues[issue_id]),
+    dim_dq_issues[severity] = "HIGH"
+)
+
+Medium_Issues_Count = 
+CALCULATE(
+    DISTINCTCOUNT(dim_dq_issues[issue_id]),
+    dim_dq_issues[severity] = "MEDIUM"
+)
+
+Low_Issues_Count = 
+CALCULATE(
+    DISTINCTCOUNT(dim_dq_issues[issue_id]),
+    dim_dq_issues[severity] = "LOW"
+)
+
+Total_Violating_Records = 
+SUM(fact_dq_validation_results[unexpected_count])
+
+// ------------------------------------------------------------------------------
+// 3. CONDITIONAL FORMATTING & DYNAMIC COLOR MEASURES
+// ------------------------------------------------------------------------------
+
+DQ_Index_Status_Color = 
+VAR Score = [Overall_DQ_Index]
+RETURN
+    SWITCH(
+        TRUE(),
+        Score >= 95.0, "#10B981", // Emerald Green (Pass)
+        Score >= 90.0, "#F59E0B", // Amber (Warning)
+        "#EF4444"                 // Crimson Red (Critical SLA Breach)
+    )
+
+Completeness_Status_Color = 
+VAR Score = [Completeness_Pct]
+RETURN
+    SWITCH(
+        TRUE(),
+        Score >= 98.0, "#10B981",
+        Score >= 95.0, "#F59E0B",
+        "#EF4444"
+    )
+
+Consistency_Status_Color = 
+VAR Score = [Consistency_Pct]
+RETURN
+    SWITCH(
+        TRUE(),
+        Score >= 99.0, "#10B981",
+        Score >= 95.0, "#F59E0B",
+        "#EF4444"
+    )
+
+Accuracy_Status_Color = 
+VAR Score = [Accuracy_Pct]
+RETURN
+    SWITCH(
+        TRUE(),
+        Score >= 98.5, "#10B981",
+        Score >= 95.0, "#F59E0B",
+        "#EF4444"
+    )
+
+Distribution_Status_Color = 
+VAR Score = [Distribution_Health_Pct]
+RETURN
+    SWITCH(
+        TRUE(),
+        Score >= 96.0, "#10B981",
+        Score >= 90.0, "#F59E0B",
+        "#EF4444"
+    )
+
+Severity_Badge_Color = 
+VAR CurrentSev = SELECTEDVALUE(dim_dq_issues[severity])
+RETURN
+    SWITCH(
+        CurrentSev,
+        "CRITICAL", "#EF4444",
+        "HIGH",     "#F97316",
+        "MEDIUM",   "#3B82F6",
+        "LOW",      "#64748B",
+        "#94A3B8"
+    )

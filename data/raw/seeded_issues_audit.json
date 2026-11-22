@@ -1,0 +1,375 @@
+{
+  "ISSUE-01": {
+    "count": 125,
+    "dataset": "dim_customers",
+    "col": "email",
+    "indices": [
+      2144,
+      2041,
+      1185,
+      159,
+      469,
+      538,
+      1900,
+      201,
+      1047,
+      1219
+    ]
+  },
+  "ISSUE-02": {
+    "count": 200,
+    "dataset": "fct_orders",
+    "col": "customer_id",
+    "indices": [
+      1491,
+      1971,
+      3704,
+      1719,
+      1960,
+      2378,
+      1994,
+      4582,
+      1140,
+      4574
+    ]
+  },
+  "ISSUE-03": {
+    "count": 210,
+    "dataset": "fct_shipments",
+    "col": "delivered_date",
+    "indices": [
+      3748,
+      548,
+      167,
+      327,
+      2467,
+      316,
+      3944,
+      1930,
+      3576,
+      2384
+    ]
+  },
+  "ISSUE-04": {
+    "count": 112,
+    "dataset": "fct_inventory",
+    "col": "reorder_point",
+    "indices": [
+      1406,
+      578,
+      1220,
+      429,
+      571,
+      1211,
+      616,
+      788,
+      935,
+      123
+    ]
+  },
+  "ISSUE-05": {
+    "count": 160,
+    "dataset": "dim_customers",
+    "col": "phone",
+    "indices": [
+      2205,
+      2293,
+      70,
+      54,
+      601,
+      260,
+      976,
+      1176,
+      2212,
+      1327
+    ]
+  },
+  "ISSUE-06": {
+    "count": 234,
+    "dataset": "fct_payments",
+    "col": "gateway_transaction_id",
+    "indices": [
+      4661,
+      4337,
+      4185,
+      5090,
+      443,
+      4126,
+      2922,
+      704,
+      4071,
+      4889
+    ]
+  },
+  "ISSUE-07": {
+    "count": 35,
+    "dataset": "fct_order_items",
+    "col": "product_id",
+    "indices": [
+      2496,
+      10677,
+      11170,
+      5990,
+      64,
+      12171,
+      10516,
+      6001,
+      4936,
+      11152
+    ]
+  },
+  "ISSUE-08": {
+    "count": 42,
+    "dataset": "fct_orders",
+    "col": "order_status",
+    "indices": [
+      4839,
+      2414,
+      553,
+      3948,
+      1178,
+      104,
+      570,
+      3228,
+      2791,
+      3805
+    ]
+  },
+  "ISSUE-09": {
+    "count": 185,
+    "dataset": "fct_orders",
+    "col": "currency",
+    "indices": [
+      1062,
+      843,
+      3636,
+      4441,
+      1691,
+      1570,
+      1165,
+      1428,
+      2886,
+      1627
+    ]
+  },
+  "ISSUE-10": {
+    "count": 38,
+    "dataset": "fct_shipments",
+    "col": "shipped_date",
+    "indices": [
+      3537,
+      3733,
+      3028,
+      4059,
+      2932,
+      2454,
+      147,
+      2187,
+      4028,
+      1840
+    ]
+  },
+  "ISSUE-11": {
+    "count": 65,
+    "dataset": "fct_payments",
+    "col": "amount_paid",
+    "indices": [
+      3515,
+      99,
+      4926,
+      2750,
+      4865,
+      2159,
+      3480,
+      4273,
+      1342,
+      4816
+    ]
+  },
+  "ISSUE-12": {
+    "count": 28,
+    "dataset": "dim_customers",
+    "col": "email",
+    "indices": [
+      2474,
+      1102,
+      1741,
+      915,
+      677,
+      1916,
+      1981,
+      2003,
+      2136,
+      2219
+    ]
+  },
+  "ISSUE-13": {
+    "count": 45,
+    "dataset": "fct_order_items",
+    "col": "quantity",
+    "indices": [
+      2367,
+      6260,
+      8799,
+      1361,
+      5423,
+      4450,
+      8171,
+      6381,
+      5460,
+      11630
+    ]
+  },
+  "ISSUE-14": {
+    "count": 25,
+    "dataset": "fct_order_items",
+    "col": "discount_rate",
+    "indices": [
+      4205,
+      10509,
+      15,
+      11401,
+      11390,
+      4428,
+      10251,
+      9624,
+      981,
+      9763
+    ]
+  },
+  "ISSUE-15": {
+    "count": 32,
+    "dataset": "fct_customer_interactions",
+    "col": "interaction_date",
+    "indices": [
+      2916,
+      2682,
+      2695,
+      2802,
+      1241,
+      2868,
+      2431,
+      1253,
+      3134,
+      2837
+    ]
+  },
+  "ISSUE-16": {
+    "count": 78,
+    "dataset": "dim_customers",
+    "col": "postal_code",
+    "indices": [
+      126,
+      1733,
+      1862,
+      281,
+      1734,
+      1131,
+      1156,
+      404,
+      1389,
+      1291
+    ]
+  },
+  "ISSUE-17": {
+    "count": 24,
+    "dataset": "dim_products",
+    "col": "unit_cost",
+    "indices": [
+      316,
+      209,
+      647,
+      372,
+      163,
+      567,
+      37,
+      376,
+      135,
+      711
+    ]
+  },
+  "ISSUE-18": {
+    "count": 36,
+    "dataset": "fct_customer_interactions",
+    "col": "rating_score",
+    "indices": [
+      2676,
+      394,
+      1956,
+      3004,
+      2706,
+      2682,
+      3032,
+      247,
+      2730,
+      974
+    ]
+  },
+  "ISSUE-19": {
+    "count": 3,
+    "dataset": "fct_orders",
+    "col": "total_amount",
+    "indices": [
+      4325,
+      2129,
+      213
+    ]
+  },
+  "ISSUE-20": {
+    "count": 1600,
+    "dataset": "fct_inventory",
+    "col": "warehouse_id",
+    "indices": "ALL_ROWS"
+  },
+  "ISSUE-21": {
+    "count": 18,
+    "dataset": "fct_customer_interactions",
+    "col": "resolution_time_mins",
+    "indices": [
+      3142,
+      3121,
+      2728,
+      2151,
+      1477,
+      2314,
+      2902,
+      950,
+      47,
+      1305
+    ]
+  },
+  "ISSUE-22": {
+    "count": 15,
+    "dataset": "dim_products",
+    "col": "weight_kg",
+    "indices": [
+      684,
+      158,
+      498,
+      265,
+      360,
+      33,
+      649,
+      717,
+      20,
+      238
+    ]
+  },
+  "ISSUE-23": {
+    "count": 480,
+    "dataset": "fct_orders",
+    "col": "discount_amount",
+    "indices": [
+      175,
+      636,
+      2392,
+      4889,
+      4102,
+      3098,
+      2786,
+      1850,
+      1478,
+      2455
+    ]
+  }
+}

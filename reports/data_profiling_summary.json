@@ -1,0 +1,2326 @@
+{
+  "metadata": {
+    "dataset_count": 8,
+    "target_tables": [
+      "dim_customers",
+      "dim_products",
+      "fct_orders",
+      "fct_order_items",
+      "fct_payments",
+      "fct_shipments",
+      "fct_inventory",
+      "fct_customer_interactions"
+    ],
+    "total_columns_cataloged": 73
+  },
+  "table_summaries": {
+    "dim_customers": {
+      "dataset_name": "dim_customers",
+      "description": "Master customer profile and demographic dimensions",
+      "primary_key": "customer_id",
+      "row_count": 2500,
+      "column_count": 10,
+      "memory_usage_mb": 1.394,
+      "total_cells": 25000,
+      "null_cells": 282,
+      "completeness_rate_pct": 98.87,
+      "duplicate_rows": 0
+    },
+    "dim_products": {
+      "dataset_name": "dim_products",
+      "description": "Product catalog and pricing master data",
+      "primary_key": "product_id",
+      "row_count": 800,
+      "column_count": 10,
+      "memory_usage_mb": 0.305,
+      "total_cells": 8000,
+      "null_cells": 0,
+      "completeness_rate_pct": 100.0,
+      "duplicate_rows": 0
+    },
+    "fct_orders": {
+      "dataset_name": "fct_orders",
+      "description": "Header-level order transactions and financial summary",
+      "primary_key": "order_id",
+      "row_count": 5000,
+      "column_count": 11,
+      "memory_usage_mb": 2.103,
+      "total_cells": 55000,
+      "null_cells": 200,
+      "completeness_rate_pct": 99.64,
+      "duplicate_rows": 0
+    },
+    "fct_order_items": {
+      "dataset_name": "fct_order_items",
+      "description": "Line-item level order fulfillment and product details",
+      "primary_key": "item_id",
+      "row_count": 12500,
+      "column_count": 8,
+      "memory_usage_mb": 3.197,
+      "total_cells": 100000,
+      "null_cells": 0,
+      "completeness_rate_pct": 100.0,
+      "duplicate_rows": 0
+    },
+    "fct_payments": {
+      "dataset_name": "fct_payments",
+      "description": "Financial payment transaction logs and gateway reconciliations",
+      "primary_key": "payment_id",
+      "row_count": 5200,
+      "column_count": 9,
+      "memory_usage_mb": 2.136,
+      "total_cells": 46800,
+      "null_cells": 234,
+      "completeness_rate_pct": 99.5,
+      "duplicate_rows": 0
+    },
+    "fct_shipments": {
+      "dataset_name": "fct_shipments",
+      "description": "Logistics and shipping tracking lifecycle events",
+      "primary_key": "shipment_id",
+      "row_count": 4800,
+      "column_count": 10,
+      "memory_usage_mb": 2.47,
+      "total_cells": 48000,
+      "null_cells": 1405,
+      "completeness_rate_pct": 97.07,
+      "duplicate_rows": 0
+    },
+    "fct_inventory": {
+      "dataset_name": "fct_inventory",
+      "description": "Warehouse inventory snapshot levels and restock thresholds",
+      "primary_key": "inventory_id",
+      "row_count": 1600,
+      "column_count": 7,
+      "memory_usage_mb": 0.394,
+      "total_cells": 11200,
+      "null_cells": 112,
+      "completeness_rate_pct": 99.0,
+      "duplicate_rows": 0
+    },
+    "fct_customer_interactions": {
+      "dataset_name": "fct_customer_interactions",
+      "description": "Customer support interactions, tickets, and CSAT scores",
+      "primary_key": "interaction_id",
+      "row_count": 3200,
+      "column_count": 8,
+      "memory_usage_mb": 0.972,
+      "total_cells": 25600,
+      "null_cells": 0,
+      "completeness_rate_pct": 100.0,
+      "duplicate_rows": 0
+    }
+  },
+  "column_profiles": {
+    "dim_customers": [
+      {
+        "column": "customer_id",
+        "dtype": "object",
+        "total_count": 2500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 2500,
+        "distinct_count": 2500,
+        "distinct_percentage": 100.0,
+        "is_unique": true,
+        "cardinality": "UNIQUE_KEY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "CUST-00001": 1,
+            "CUST-00002": 1,
+            "CUST-00003": 1,
+            "CUST-00004": 1,
+            "CUST-00005": 1
+          }
+        }
+      },
+      {
+        "column": "first_name",
+        "dtype": "object",
+        "total_count": 2500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 2500,
+        "distinct_count": 32,
+        "distinct_percentage": 1.28,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 4,
+          "max_length": 11,
+          "avg_length": 6.22,
+          "top_5_frequent": {
+            "Donald": 105,
+            "Jennifer": 97,
+            "Elizabeth": 93,
+            "William": 91,
+            "Joseph": 89
+          }
+        }
+      },
+      {
+        "column": "last_name",
+        "dtype": "object",
+        "total_count": 2500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 2500,
+        "distinct_count": 24,
+        "distinct_percentage": 0.96,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 3,
+          "max_length": 9,
+          "avg_length": 6.35,
+          "top_5_frequent": {
+            "Rodriguez": 120,
+            "Williams": 117,
+            "Miller": 116,
+            "Jones": 111,
+            "Brown": 111
+          }
+        }
+      },
+      {
+        "column": "email",
+        "dtype": "object",
+        "total_count": 2500,
+        "null_count": 122,
+        "null_percentage": 4.88,
+        "non_null_count": 2378,
+        "distinct_count": 2350,
+        "distinct_percentage": 98.82,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "text_stats": {
+          "min_length": 23,
+          "max_length": 37,
+          "avg_length": 29.12,
+          "top_5_frequent": {
+            "margaret.williams894@example.com": 2,
+            "joseph.miller2311@example.com": 2,
+            "margaret.martin2397@example.com": 2,
+            "mark.jones1950@example.com": 2,
+            "joseph.martinez928@example.com": 2
+          }
+        }
+      },
+      {
+        "column": "phone",
+        "dtype": "object",
+        "total_count": 2500,
+        "null_count": 160,
+        "null_percentage": 6.4,
+        "non_null_count": 2340,
+        "distinct_count": 2340,
+        "distinct_percentage": 100.0,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "text_stats": {
+          "min_length": 15,
+          "max_length": 15,
+          "avg_length": 15.0,
+          "top_5_frequent": {
+            "+1-959-381-5012": 1,
+            "+1-230-195-4582": 1,
+            "+1-659-703-5557": 1,
+            "+1-981-444-2674": 1,
+            "+1-670-649-3045": 1
+          }
+        }
+      },
+      {
+        "column": "registration_date",
+        "dtype": "object",
+        "total_count": 2500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 2500,
+        "distinct_count": 679,
+        "distinct_percentage": 27.16,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "2023-06-21": 9,
+            "2023-01-27": 9,
+            "2024-08-05": 9,
+            "2024-01-06": 9,
+            "2024-07-28": 9
+          }
+        }
+      },
+      {
+        "column": "customer_segment",
+        "dtype": "object",
+        "total_count": 2500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 2500,
+        "distinct_count": 4,
+        "distinct_percentage": 0.16,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 3,
+          "max_length": 14,
+          "avg_length": 8.85,
+          "top_5_frequent": {
+            "Consumer": 1519,
+            "Corporate": 511,
+            "Small Business": 360,
+            "VIP": 110
+          }
+        }
+      },
+      {
+        "column": "country_code",
+        "dtype": "object",
+        "total_count": 2500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 2500,
+        "distinct_count": 4,
+        "distinct_percentage": 0.16,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 2,
+          "max_length": 2,
+          "avg_length": 2.0,
+          "top_5_frequent": {
+            "US": 1879,
+            "CA": 256,
+            "GB": 234,
+            "DE": 131
+          }
+        }
+      },
+      {
+        "column": "postal_code",
+        "dtype": "object",
+        "total_count": 2500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 2500,
+        "distinct_count": 2398,
+        "distinct_percentage": 95.92,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "text_stats": {
+          "min_length": 3,
+          "max_length": 11,
+          "avg_length": 5.04,
+          "top_5_frequent": {
+            "99#$%": 13,
+            "123": 13,
+            "INVALID": 13,
+            "ABCDE": 13,
+            "ZIP-90210??": 13
+          }
+        }
+      },
+      {
+        "column": "status",
+        "dtype": "object",
+        "total_count": 2500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 2500,
+        "distinct_count": 3,
+        "distinct_percentage": 0.12,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 6,
+          "max_length": 9,
+          "avg_length": 6.32,
+          "top_5_frequent": {
+            "Active": 2129,
+            "Inactive": 304,
+            "Suspended": 67
+          }
+        }
+      }
+    ],
+    "dim_products": [
+      {
+        "column": "product_id",
+        "dtype": "object",
+        "total_count": 800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 800,
+        "distinct_count": 800,
+        "distinct_percentage": 100.0,
+        "is_unique": true,
+        "cardinality": "UNIQUE_KEY",
+        "text_stats": {
+          "min_length": 9,
+          "max_length": 9,
+          "avg_length": 9.0,
+          "top_5_frequent": {
+            "PROD-0001": 1,
+            "PROD-0002": 1,
+            "PROD-0003": 1,
+            "PROD-0004": 1,
+            "PROD-0005": 1
+          }
+        }
+      },
+      {
+        "column": "sku",
+        "dtype": "object",
+        "total_count": 800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 800,
+        "distinct_count": 800,
+        "distinct_percentage": 100.0,
+        "is_unique": true,
+        "cardinality": "UNIQUE_KEY",
+        "text_stats": {
+          "min_length": 16,
+          "max_length": 16,
+          "avg_length": 16.0,
+          "top_5_frequent": {
+            "SKU-APP-OUT-0001": 1,
+            "SKU-HOM-BED-0002": 1,
+            "SKU-SPO-TEA-0003": 1,
+            "SKU-APP-OUT-0004": 1,
+            "SKU-SPO-TEA-0005": 1
+          }
+        }
+      },
+      {
+        "column": "product_name",
+        "dtype": "object",
+        "total_count": 800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 800,
+        "distinct_count": 800,
+        "distinct_percentage": 100.0,
+        "is_unique": true,
+        "cardinality": "UNIQUE_KEY",
+        "text_stats": {
+          "min_length": 24,
+          "max_length": 37,
+          "avg_length": 29.59,
+          "top_5_frequent": {
+            "Outerwear Premium Edition 1": 1,
+            "Bedding Premium Edition 2": 1,
+            "Team Sports Premium Edition 3": 1,
+            "Outerwear Premium Edition 4": 1,
+            "Team Sports Premium Edition 5": 1
+          }
+        }
+      },
+      {
+        "column": "category",
+        "dtype": "object",
+        "total_count": 800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 800,
+        "distinct_count": 5,
+        "distinct_percentage": 0.62,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 5,
+          "max_length": 14,
+          "avg_length": 8.42,
+          "top_5_frequent": {
+            "Books": 176,
+            "Sports": 165,
+            "Apparel": 158,
+            "Electronics": 151,
+            "Home & Kitchen": 150
+          }
+        }
+      },
+      {
+        "column": "sub_category",
+        "dtype": "object",
+        "total_count": 800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 800,
+        "distinct_count": 25,
+        "distinct_percentage": 3.12,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 5,
+          "max_length": 17,
+          "avg_length": 9.73,
+          "top_5_frequent": {
+            "Non-Fiction": 43,
+            "Team Sports": 42,
+            "Technical": 41,
+            "Wearables": 40,
+            "Bedding": 40
+          }
+        }
+      },
+      {
+        "column": "unit_cost",
+        "dtype": "float64",
+        "total_count": 800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 800,
+        "distinct_count": 797,
+        "distinct_percentage": 99.62,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "numeric_stats": {
+          "min": 5.21,
+          "max": 1720.62,
+          "mean": 251.3821,
+          "std": 179.8428,
+          "median": 237.26,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "unit_price",
+        "dtype": "float64",
+        "total_count": 800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 800,
+        "distinct_count": 797,
+        "distinct_percentage": 99.62,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "numeric_stats": {
+          "min": 9.19,
+          "max": 1067.26,
+          "mean": 435.2067,
+          "std": 250.5634,
+          "median": 423.91499999999996,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "weight_kg",
+        "dtype": "float64",
+        "total_count": 800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 800,
+        "distinct_count": 614,
+        "distinct_percentage": 76.75,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "numeric_stats": {
+          "min": 0.13,
+          "max": 5094.3,
+          "mean": 98.4746,
+          "std": 658.9973,
+          "median": 7.575,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "supplier_id",
+        "dtype": "object",
+        "total_count": 800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 800,
+        "distinct_count": 40,
+        "distinct_percentage": 5.0,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 8,
+          "max_length": 8,
+          "avg_length": 8.0,
+          "top_5_frequent": {
+            "SUPP-027": 30,
+            "SUPP-031": 29,
+            "SUPP-007": 27,
+            "SUPP-014": 27,
+            "SUPP-002": 25
+          }
+        }
+      },
+      {
+        "column": "is_active",
+        "dtype": "bool",
+        "total_count": 800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 800,
+        "distinct_count": 2,
+        "distinct_percentage": 0.25,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "numeric_stats": {
+          "min": 0.0,
+          "max": 1.0,
+          "mean": 0.9263,
+          "std": 0.2615,
+          "median": 1.0,
+          "zero_count": 59,
+          "negative_count": 0
+        }
+      }
+    ],
+    "fct_orders": [
+      {
+        "column": "order_id",
+        "dtype": "object",
+        "total_count": 5000,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5000,
+        "distinct_count": 5000,
+        "distinct_percentage": 100.0,
+        "is_unique": true,
+        "cardinality": "UNIQUE_KEY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "ORD-000001": 1,
+            "ORD-000002": 1,
+            "ORD-000003": 1,
+            "ORD-000004": 1,
+            "ORD-000005": 1
+          }
+        }
+      },
+      {
+        "column": "customer_id",
+        "dtype": "object",
+        "total_count": 5000,
+        "null_count": 200,
+        "null_percentage": 4.0,
+        "non_null_count": 4800,
+        "distinct_count": 2171,
+        "distinct_percentage": 45.23,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "CUST-00073": 9,
+            "CUST-01252": 9,
+            "CUST-01570": 8,
+            "CUST-01556": 8,
+            "CUST-01324": 7
+          }
+        }
+      },
+      {
+        "column": "order_date",
+        "dtype": "object",
+        "total_count": 5000,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5000,
+        "distinct_count": 4969,
+        "distinct_percentage": 99.38,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "text_stats": {
+          "min_length": 19,
+          "max_length": 19,
+          "avg_length": 19.0,
+          "top_5_frequent": {
+            "2024-09-28 14:50:00": 3,
+            "2024-07-26 16:33:00": 2,
+            "2024-10-22 01:16:00": 2,
+            "2024-08-29 07:43:00": 2,
+            "2024-07-31 11:11:00": 2
+          }
+        }
+      },
+      {
+        "column": "order_status",
+        "dtype": "object",
+        "total_count": 5000,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5000,
+        "distinct_count": 6,
+        "distinct_percentage": 0.12,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 7,
+          "max_length": 10,
+          "avg_length": 8.66,
+          "top_5_frequent": {
+            "Delivered": 3234,
+            "Shipped": 736,
+            "Processing": 382,
+            "Cancelled": 287,
+            "Pending": 263
+          }
+        }
+      },
+      {
+        "column": "payment_method",
+        "dtype": "object",
+        "total_count": 5000,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5000,
+        "distinct_count": 4,
+        "distinct_percentage": 0.08,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 6,
+          "max_length": 13,
+          "avg_length": 9.97,
+          "top_5_frequent": {
+            "Credit Card": 2752,
+            "PayPal": 1250,
+            "Wire Transfer": 768,
+            "Gift Card": 230
+          }
+        }
+      },
+      {
+        "column": "currency",
+        "dtype": "object",
+        "total_count": 5000,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5000,
+        "distinct_count": 5,
+        "distinct_percentage": 0.1,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 1,
+          "max_length": 9,
+          "avg_length": 3.04,
+          "top_5_frequent": {
+            "USD": 4815,
+            "usd": 47,
+            "Usd": 46,
+            "US_DOLLAR": 46,
+            "$": 46
+          }
+        }
+      },
+      {
+        "column": "subtotal_amount",
+        "dtype": "float64",
+        "total_count": 5000,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5000,
+        "distinct_count": 4869,
+        "distinct_percentage": 97.38,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "numeric_stats": {
+          "min": 20.07,
+          "max": 9999000.0,
+          "mean": 6438.7518,
+          "std": 244864.8296,
+          "median": 433.33500000000004,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "discount_amount",
+        "dtype": "float64",
+        "total_count": 5000,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5000,
+        "distinct_count": 2364,
+        "distinct_percentage": 47.28,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "numeric_stats": {
+          "min": 0.0,
+          "max": 169.64,
+          "mean": 25.4587,
+          "std": 35.6044,
+          "median": 7.385,
+          "zero_count": 1818,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "tax_amount",
+        "dtype": "float64",
+        "total_count": 5000,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5000,
+        "distinct_count": 3465,
+        "distinct_percentage": 69.3,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "numeric_stats": {
+          "min": 1.41,
+          "max": 67.96,
+          "mean": 32.9145,
+          "std": 18.0351,
+          "median": 32.57,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "total_amount",
+        "dtype": "float64",
+        "total_count": 5000,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5000,
+        "distinct_count": 4848,
+        "distinct_percentage": 96.96,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "numeric_stats": {
+          "min": 19.07,
+          "max": 9999999.0,
+          "mean": 6444.0763,
+          "std": 244889.1843,
+          "median": 439.875,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "channel",
+        "dtype": "object",
+        "total_count": 5000,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5000,
+        "distinct_count": 4,
+        "distinct_percentage": 0.08,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 3,
+          "max_length": 11,
+          "avg_length": 6.36,
+          "top_5_frequent": {
+            "Web": 2481,
+            "Mobile App": 1505,
+            "In-Store": 619,
+            "Marketplace": 395
+          }
+        }
+      }
+    ],
+    "fct_order_items": [
+      {
+        "column": "item_id",
+        "dtype": "object",
+        "total_count": 12500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 12500,
+        "distinct_count": 12500,
+        "distinct_percentage": 100.0,
+        "is_unique": true,
+        "cardinality": "UNIQUE_KEY",
+        "text_stats": {
+          "min_length": 12,
+          "max_length": 12,
+          "avg_length": 12.0,
+          "top_5_frequent": {
+            "ITEM-0000001": 1,
+            "ITEM-0000002": 1,
+            "ITEM-0000003": 1,
+            "ITEM-0000004": 1,
+            "ITEM-0000005": 1
+          }
+        }
+      },
+      {
+        "column": "order_id",
+        "dtype": "object",
+        "total_count": 12500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 12500,
+        "distinct_count": 4621,
+        "distinct_percentage": 36.97,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "ORD-000588": 10,
+            "ORD-002597": 9,
+            "ORD-004913": 9,
+            "ORD-000150": 9,
+            "ORD-004178": 8
+          }
+        }
+      },
+      {
+        "column": "product_id",
+        "dtype": "object",
+        "total_count": 12500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 12500,
+        "distinct_count": 835,
+        "distinct_percentage": 6.68,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 9,
+          "max_length": 13,
+          "avg_length": 9.01,
+          "top_5_frequent": {
+            "PROD-0314": 28,
+            "PROD-0188": 28,
+            "PROD-0514": 27,
+            "PROD-0137": 27,
+            "PROD-0583": 26
+          }
+        }
+      },
+      {
+        "column": "quantity",
+        "dtype": "int64",
+        "total_count": 12500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 12500,
+        "distinct_count": 10,
+        "distinct_percentage": 0.08,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "numeric_stats": {
+          "min": -5.0,
+          "max": 5.0,
+          "mean": 2.9966,
+          "std": 1.4632,
+          "median": 3.0,
+          "zero_count": 0,
+          "negative_count": 45
+        }
+      },
+      {
+        "column": "unit_price",
+        "dtype": "float64",
+        "total_count": 12500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 12500,
+        "distinct_count": 797,
+        "distinct_percentage": 6.38,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "numeric_stats": {
+          "min": 9.19,
+          "max": 1067.26,
+          "mean": 432.361,
+          "std": 249.0144,
+          "median": 420.06,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "discount_rate",
+        "dtype": "float64",
+        "total_count": 12500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 12500,
+        "distinct_count": 27,
+        "distinct_percentage": 0.22,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "numeric_stats": {
+          "min": 0.0,
+          "max": 2.48,
+          "mean": 0.0392,
+          "std": 0.1003,
+          "median": 0.0,
+          "zero_count": 7443,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "total_item_price",
+        "dtype": "float64",
+        "total_count": 12500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 12500,
+        "distinct_count": 7263,
+        "distinct_percentage": 58.1,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "numeric_stats": {
+          "min": 8.27,
+          "max": 5336.3,
+          "mean": 1268.3067,
+          "std": 1014.8945,
+          "median": 984.73,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "fulfillment_status",
+        "dtype": "object",
+        "total_count": 12500,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 12500,
+        "distinct_count": 3,
+        "distinct_percentage": 0.02,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 9,
+          "max_length": 11,
+          "avg_length": 9.14,
+          "top_5_frequent": {
+            "Fulfilled": 11238,
+            "Backordered": 875,
+            "Cancelled": 387
+          }
+        }
+      }
+    ],
+    "fct_payments": [
+      {
+        "column": "payment_id",
+        "dtype": "object",
+        "total_count": 5200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5200,
+        "distinct_count": 5200,
+        "distinct_percentage": 100.0,
+        "is_unique": true,
+        "cardinality": "UNIQUE_KEY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "PAY-000001": 1,
+            "PAY-000002": 1,
+            "PAY-000003": 1,
+            "PAY-000004": 1,
+            "PAY-000005": 1
+          }
+        }
+      },
+      {
+        "column": "order_id",
+        "dtype": "object",
+        "total_count": 5200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5200,
+        "distinct_count": 3232,
+        "distinct_percentage": 62.15,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "ORD-003976": 6,
+            "ORD-003592": 6,
+            "ORD-003315": 5,
+            "ORD-002963": 5,
+            "ORD-003953": 5
+          }
+        }
+      },
+      {
+        "column": "payment_date",
+        "dtype": "object",
+        "total_count": 5200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5200,
+        "distinct_count": 5118,
+        "distinct_percentage": 98.42,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "text_stats": {
+          "min_length": 19,
+          "max_length": 19,
+          "avg_length": 19.0,
+          "top_5_frequent": {
+            "2024-02-07 15:58:00": 3,
+            "2024-10-23 09:20:00": 2,
+            "2024-05-06 22:02:00": 2,
+            "2024-02-03 20:17:00": 2,
+            "2024-06-11 08:22:00": 2
+          }
+        }
+      },
+      {
+        "column": "payment_method",
+        "dtype": "object",
+        "total_count": 5200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5200,
+        "distinct_count": 4,
+        "distinct_percentage": 0.08,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 6,
+          "max_length": 13,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "Credit Card": 2810,
+            "PayPal": 1292,
+            "Wire Transfer": 863,
+            "Gift Card": 235
+          }
+        }
+      },
+      {
+        "column": "payment_status",
+        "dtype": "object",
+        "total_count": 5200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5200,
+        "distinct_count": 4,
+        "distinct_percentage": 0.08,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 6,
+          "max_length": 8,
+          "avg_length": 7.0,
+          "top_5_frequent": {
+            "Success": 4802,
+            "Pending": 197,
+            "Failed": 101,
+            "Refunded": 100
+          }
+        }
+      },
+      {
+        "column": "amount_paid",
+        "dtype": "float64",
+        "total_count": 5200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5200,
+        "distinct_count": 3211,
+        "distinct_percentage": 61.75,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "numeric_stats": {
+          "min": 19.15,
+          "max": 944.94,
+          "mean": 442.0025,
+          "std": 242.8064,
+          "median": 433.22,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "gateway_transaction_id",
+        "dtype": "object",
+        "total_count": 5200,
+        "null_count": 234,
+        "null_percentage": 4.5,
+        "non_null_count": 4966,
+        "distinct_count": 4965,
+        "distinct_percentage": 99.98,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "text_stats": {
+          "min_length": 14,
+          "max_length": 14,
+          "avg_length": 14.0,
+          "top_5_frequent": {
+            "TXN-GW-7158119": 2,
+            "TXN-GW-9595065": 1,
+            "TXN-GW-8325286": 1,
+            "TXN-GW-4675317": 1,
+            "TXN-GW-3685295": 1
+          }
+        }
+      },
+      {
+        "column": "fee_amount",
+        "dtype": "float64",
+        "total_count": 5200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5200,
+        "distinct_count": 1688,
+        "distinct_percentage": 32.46,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "numeric_stats": {
+          "min": 0.78,
+          "max": 23.24,
+          "mean": 11.3512,
+          "std": 6.0682,
+          "median": 11.135000000000002,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "currency",
+        "dtype": "object",
+        "total_count": 5200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 5200,
+        "distinct_count": 1,
+        "distinct_percentage": 0.02,
+        "is_unique": false,
+        "cardinality": "CONSTANT / ZERO_VARIANCE",
+        "text_stats": {
+          "min_length": 3,
+          "max_length": 3,
+          "avg_length": 3.0,
+          "top_5_frequent": {
+            "USD": 5200
+          }
+        }
+      }
+    ],
+    "fct_shipments": [
+      {
+        "column": "shipment_id",
+        "dtype": "object",
+        "total_count": 4800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 4800,
+        "distinct_count": 4800,
+        "distinct_percentage": 100.0,
+        "is_unique": true,
+        "cardinality": "UNIQUE_KEY",
+        "text_stats": {
+          "min_length": 11,
+          "max_length": 11,
+          "avg_length": 11.0,
+          "top_5_frequent": {
+            "SHIP-000001": 1,
+            "SHIP-000002": 1,
+            "SHIP-000003": 1,
+            "SHIP-000004": 1,
+            "SHIP-000005": 1
+          }
+        }
+      },
+      {
+        "column": "order_id",
+        "dtype": "object",
+        "total_count": 4800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 4800,
+        "distinct_count": 3097,
+        "distinct_percentage": 64.52,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "ORD-000998": 7,
+            "ORD-001754": 6,
+            "ORD-004789": 6,
+            "ORD-001860": 5,
+            "ORD-001452": 5
+          }
+        }
+      },
+      {
+        "column": "carrier",
+        "dtype": "object",
+        "total_count": 4800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 4800,
+        "distinct_count": 4,
+        "distinct_percentage": 0.08,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 3,
+          "max_length": 5,
+          "avg_length": 3.75,
+          "top_5_frequent": {
+            "FedEx": 1227,
+            "DHL": 1206,
+            "UPS": 1206,
+            "USPS": 1161
+          }
+        }
+      },
+      {
+        "column": "tracking_number",
+        "dtype": "object",
+        "total_count": 4800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 4800,
+        "distinct_count": 4800,
+        "distinct_percentage": 100.0,
+        "is_unique": true,
+        "cardinality": "UNIQUE_KEY",
+        "text_stats": {
+          "min_length": 16,
+          "max_length": 16,
+          "avg_length": 16.0,
+          "top_5_frequent": {
+            "TRK-FED-98454638": 1,
+            "TRK-USP-85215722": 1,
+            "TRK-USP-97737786": 1,
+            "TRK-DHL-25690877": 1,
+            "TRK-UPS-77928614": 1
+          }
+        }
+      },
+      {
+        "column": "shipped_date",
+        "dtype": "object",
+        "total_count": 4800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 4800,
+        "distinct_count": 4750,
+        "distinct_percentage": 98.96,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "text_stats": {
+          "min_length": 19,
+          "max_length": 19,
+          "avg_length": 19.0,
+          "top_5_frequent": {
+            "2024-04-27 11:27:00": 2,
+            "2024-06-21 10:39:00": 2,
+            "2024-11-22 23:23:00": 2,
+            "2024-07-15 05:16:00": 2,
+            "2024-04-05 22:57:00": 2
+          }
+        }
+      },
+      {
+        "column": "delivered_date",
+        "dtype": "object",
+        "total_count": 4800,
+        "null_count": 1405,
+        "null_percentage": 29.27,
+        "non_null_count": 3395,
+        "distinct_count": 3377,
+        "distinct_percentage": 99.47,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "text_stats": {
+          "min_length": 19,
+          "max_length": 19,
+          "avg_length": 19.0,
+          "top_5_frequent": {
+            "2024-03-25 16:06:00": 2,
+            "2024-11-17 04:18:00": 2,
+            "2024-10-04 04:48:00": 2,
+            "2024-11-15 17:56:00": 2,
+            "2024-04-30 18:28:00": 2
+          }
+        }
+      },
+      {
+        "column": "shipping_status",
+        "dtype": "object",
+        "total_count": 4800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 4800,
+        "distinct_count": 4,
+        "distinct_percentage": 0.08,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 8,
+          "max_length": 15,
+          "avg_length": 9.37,
+          "top_5_frequent": {
+            "Delivered": 3605,
+            "In Transit": 883,
+            "Failed Delivery": 171,
+            "Returned": 141
+          }
+        }
+      },
+      {
+        "column": "shipping_cost",
+        "dtype": "float64",
+        "total_count": 4800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 4800,
+        "distinct_count": 2770,
+        "distinct_percentage": 57.71,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "numeric_stats": {
+          "min": 5.5,
+          "max": 44.99,
+          "mean": 25.421,
+          "std": 11.4025,
+          "median": 25.45,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "origin_warehouse_id",
+        "dtype": "object",
+        "total_count": 4800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 4800,
+        "distinct_count": 4,
+        "distinct_percentage": 0.08,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 13,
+          "avg_length": 10.99,
+          "top_5_frequent": {
+            "WH-EAST-01": 1220,
+            "WH-WEST-02": 1215,
+            "WH-SOUTH-04": 1183,
+            "WH-CENTRAL-03": 1182
+          }
+        }
+      },
+      {
+        "column": "destination_country",
+        "dtype": "object",
+        "total_count": 4800,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 4800,
+        "distinct_count": 1,
+        "distinct_percentage": 0.02,
+        "is_unique": false,
+        "cardinality": "CONSTANT / ZERO_VARIANCE",
+        "text_stats": {
+          "min_length": 2,
+          "max_length": 2,
+          "avg_length": 2.0,
+          "top_5_frequent": {
+            "US": 4800
+          }
+        }
+      }
+    ],
+    "fct_inventory": [
+      {
+        "column": "inventory_id",
+        "dtype": "object",
+        "total_count": 1600,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 1600,
+        "distinct_count": 1600,
+        "distinct_percentage": 100.0,
+        "is_unique": true,
+        "cardinality": "UNIQUE_KEY",
+        "text_stats": {
+          "min_length": 9,
+          "max_length": 9,
+          "avg_length": 9.0,
+          "top_5_frequent": {
+            "INV-00001": 1,
+            "INV-00002": 1,
+            "INV-00003": 1,
+            "INV-00004": 1,
+            "INV-00005": 1
+          }
+        }
+      },
+      {
+        "column": "warehouse_id",
+        "dtype": "object",
+        "total_count": 1600,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 1600,
+        "distinct_count": 1,
+        "distinct_percentage": 0.06,
+        "is_unique": false,
+        "cardinality": "CONSTANT / ZERO_VARIANCE",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "WH-DEFAULT": 1600
+          }
+        }
+      },
+      {
+        "column": "product_id",
+        "dtype": "object",
+        "total_count": 1600,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 1600,
+        "distinct_count": 695,
+        "distinct_percentage": 43.44,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "text_stats": {
+          "min_length": 9,
+          "max_length": 9,
+          "avg_length": 9.0,
+          "top_5_frequent": {
+            "PROD-0035": 8,
+            "PROD-0259": 7,
+            "PROD-0513": 6,
+            "PROD-0260": 6,
+            "PROD-0269": 6
+          }
+        }
+      },
+      {
+        "column": "stock_on_hand",
+        "dtype": "int64",
+        "total_count": 1600,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 1600,
+        "distinct_count": 975,
+        "distinct_percentage": 60.94,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "numeric_stats": {
+          "min": 20.0,
+          "max": 1499.0,
+          "mean": 773.6187,
+          "std": 421.3243,
+          "median": 781.0,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "stock_reserved",
+        "dtype": "int64",
+        "total_count": 1600,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 1600,
+        "distinct_count": 309,
+        "distinct_percentage": 19.31,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "numeric_stats": {
+          "min": 1.0,
+          "max": 368.0,
+          "mean": 112.825,
+          "std": 78.6775,
+          "median": 97.0,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "reorder_point",
+        "dtype": "float64",
+        "total_count": 1600,
+        "null_count": 112,
+        "null_percentage": 7.0,
+        "non_null_count": 1488,
+        "distinct_count": 250,
+        "distinct_percentage": 16.8,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "numeric_stats": {
+          "min": 50.0,
+          "max": 300.0,
+          "mean": 175.4489,
+          "std": 73.0508,
+          "median": 177.0,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "last_restock_date",
+        "dtype": "object",
+        "total_count": 1600,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 1600,
+        "distinct_count": 90,
+        "distinct_percentage": 5.62,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "2024-03-11": 31,
+            "2024-03-13": 28,
+            "2024-03-21": 27,
+            "2024-03-06": 27,
+            "2024-04-26": 26
+          }
+        }
+      }
+    ],
+    "fct_customer_interactions": [
+      {
+        "column": "interaction_id",
+        "dtype": "object",
+        "total_count": 3200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 3200,
+        "distinct_count": 3200,
+        "distinct_percentage": 100.0,
+        "is_unique": true,
+        "cardinality": "UNIQUE_KEY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "INT-000001": 1,
+            "INT-000002": 1,
+            "INT-000003": 1,
+            "INT-000004": 1,
+            "INT-000005": 1
+          }
+        }
+      },
+      {
+        "column": "customer_id",
+        "dtype": "object",
+        "total_count": 3200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 3200,
+        "distinct_count": 1783,
+        "distinct_percentage": 55.72,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "text_stats": {
+          "min_length": 10,
+          "max_length": 10,
+          "avg_length": 10.0,
+          "top_5_frequent": {
+            "CUST-00826": 6,
+            "CUST-00947": 6,
+            "CUST-00943": 6,
+            "CUST-00753": 6,
+            "CUST-02029": 6
+          }
+        }
+      },
+      {
+        "column": "interaction_date",
+        "dtype": "object",
+        "total_count": 3200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 3200,
+        "distinct_count": 3183,
+        "distinct_percentage": 99.47,
+        "is_unique": false,
+        "cardinality": "HIGH_CARDINALITY",
+        "text_stats": {
+          "min_length": 19,
+          "max_length": 19,
+          "avg_length": 19.0,
+          "top_5_frequent": {
+            "2024-11-20 04:27:00": 2,
+            "2024-05-15 02:11:00": 2,
+            "2024-02-29 06:53:00": 2,
+            "2024-05-06 12:51:00": 2,
+            "2024-11-23 18:24:00": 2
+          }
+        }
+      },
+      {
+        "column": "channel",
+        "dtype": "object",
+        "total_count": 3200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 3200,
+        "distinct_count": 4,
+        "distinct_percentage": 0.12,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 4,
+          "max_length": 12,
+          "avg_length": 6.55,
+          "top_5_frequent": {
+            "Social Media": 823,
+            "Phone": 820,
+            "Chat": 798,
+            "Email": 759
+          }
+        }
+      },
+      {
+        "column": "rating_score",
+        "dtype": "int64",
+        "total_count": 3200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 3200,
+        "distinct_count": 8,
+        "distinct_percentage": 0.25,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "numeric_stats": {
+          "min": 1.0,
+          "max": 10.0,
+          "mean": 3.6244,
+          "std": 1.3328,
+          "median": 4.0,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "resolution_time_mins",
+        "dtype": "float64",
+        "total_count": 3200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 3200,
+        "distinct_count": 1175,
+        "distinct_percentage": 36.72,
+        "is_unique": false,
+        "cardinality": "MEDIUM_CARDINALITY",
+        "numeric_stats": {
+          "min": 5.0,
+          "max": 64314.0,
+          "mean": 357.1095,
+          "std": 4111.775,
+          "median": 36.7,
+          "zero_count": 0,
+          "negative_count": 0
+        }
+      },
+      {
+        "column": "issue_category",
+        "dtype": "object",
+        "total_count": 3200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 3200,
+        "distinct_count": 4,
+        "distinct_percentage": 0.12,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "text_stats": {
+          "min_length": 7,
+          "max_length": 15,
+          "avg_length": 11.02,
+          "top_5_frequent": {
+            "Product Inquiry": 831,
+            "Billing": 829,
+            "Return Request": 777,
+            "Shipping": 763
+          }
+        }
+      },
+      {
+        "column": "is_escalated",
+        "dtype": "bool",
+        "total_count": 3200,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "non_null_count": 3200,
+        "distinct_count": 2,
+        "distinct_percentage": 0.06,
+        "is_unique": false,
+        "cardinality": "LOW_CARDINALITY",
+        "numeric_stats": {
+          "min": 0.0,
+          "max": 1.0,
+          "mean": 0.1156,
+          "std": 0.3198,
+          "median": 0.0,
+          "zero_count": 2830,
+          "negative_count": 0
+        }
+      }
+    ]
+  },
+  "distribution_profiles": {
+    "dim_customers": [],
+    "dim_products": [
+      {
+        "column": "unit_cost",
+        "count": 800,
+        "min": 5.21,
+        "max": 1720.62,
+        "mean": 251.3821,
+        "std": 179.8428,
+        "median": 237.26,
+        "q25": 132.8425,
+        "q75": 342.605,
+        "iqr": 209.7625,
+        "skewness": 2.6373,
+        "kurtosis": 13.9476,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 11,
+        "outliers_zscore_count": 15,
+        "has_frequency_spike": false,
+        "top_frequent_value": 295.01,
+        "top_frequency_ratio": 0.0025,
+        "anomalies_detected": [
+          "EXTREME_OUTLIERS_COUNT_11"
+        ],
+        "health_status": "ANOMALY_FLAGGED",
+        "dataset": "dim_products"
+      },
+      {
+        "column": "unit_price",
+        "count": 800,
+        "min": 9.19,
+        "max": 1067.26,
+        "mean": 435.2067,
+        "std": 250.5634,
+        "median": 423.915,
+        "q25": 229.7725,
+        "q75": 606.415,
+        "iqr": 376.6425,
+        "skewness": 0.2857,
+        "kurtosis": -0.718,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 0,
+        "outliers_zscore_count": 0,
+        "has_frequency_spike": false,
+        "top_frequent_value": 161.74,
+        "top_frequency_ratio": 0.0025,
+        "anomalies_detected": [],
+        "health_status": "HEALTHY",
+        "dataset": "dim_products"
+      },
+      {
+        "column": "weight_kg",
+        "count": 800,
+        "min": 0.13,
+        "max": 5094.3,
+        "mean": 98.4746,
+        "std": 658.9973,
+        "median": 7.575,
+        "q25": 3.7,
+        "q75": 11.6225,
+        "iqr": 7.9225,
+        "skewness": 7.1238,
+        "kurtosis": 48.9467,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 15,
+        "outliers_zscore_count": 15,
+        "has_frequency_spike": false,
+        "top_frequent_value": 13.72,
+        "top_frequency_ratio": 0.005,
+        "anomalies_detected": [
+          "EXTREME_OUTLIERS_COUNT_15",
+          "HIGH_SKEWNESS_7.12"
+        ],
+        "health_status": "ANOMALY_FLAGGED",
+        "dataset": "dim_products"
+      }
+    ],
+    "fct_orders": [
+      {
+        "column": "subtotal_amount",
+        "count": 5000,
+        "min": 20.07,
+        "max": 9999000.0,
+        "mean": 6438.7518,
+        "std": 244864.8296,
+        "median": 433.335,
+        "q25": 236.6475,
+        "q75": 643.3,
+        "iqr": 406.6525,
+        "skewness": 40.8003,
+        "kurtosis": 1663.3282,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 3,
+        "outliers_zscore_count": 3,
+        "has_frequency_spike": false,
+        "top_frequent_value": 828.82,
+        "top_frequency_ratio": 0.0006,
+        "anomalies_detected": [
+          "EXTREME_OUTLIERS_COUNT_3",
+          "HIGH_SKEWNESS_40.8"
+        ],
+        "health_status": "ANOMALY_FLAGGED",
+        "dataset": "fct_orders"
+      },
+      {
+        "column": "discount_amount",
+        "count": 5000,
+        "min": 0.0,
+        "max": 169.64,
+        "mean": 25.4587,
+        "std": 35.6044,
+        "median": 7.385,
+        "q25": 0.0,
+        "q75": 39.175,
+        "iqr": 39.175,
+        "skewness": 1.6446,
+        "kurtosis": 2.3423,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 34,
+        "outliers_zscore_count": 48,
+        "has_frequency_spike": false,
+        "top_frequent_value": 0.0,
+        "top_frequency_ratio": 0.3636,
+        "anomalies_detected": [
+          "EXTREME_OUTLIERS_COUNT_34"
+        ],
+        "health_status": "ANOMALY_FLAGGED",
+        "dataset": "fct_orders"
+      },
+      {
+        "column": "tax_amount",
+        "count": 5000,
+        "min": 1.41,
+        "max": 67.96,
+        "mean": 32.9145,
+        "std": 18.0351,
+        "median": 32.57,
+        "q25": 17.61,
+        "q75": 48.07,
+        "iqr": 30.46,
+        "skewness": 0.0409,
+        "kurtosis": -1.1156,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 0,
+        "outliers_zscore_count": 0,
+        "has_frequency_spike": false,
+        "top_frequent_value": 11.37,
+        "top_frequency_ratio": 0.0012,
+        "anomalies_detected": [],
+        "health_status": "HEALTHY",
+        "dataset": "fct_orders"
+      },
+      {
+        "column": "total_amount",
+        "count": 5000,
+        "min": 19.07,
+        "max": 9999999.0,
+        "mean": 6444.0763,
+        "std": 244889.1843,
+        "median": 439.875,
+        "q25": 237.7375,
+        "q75": 649.1275,
+        "iqr": 411.39,
+        "skewness": 40.8003,
+        "kurtosis": 1663.328,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 3,
+        "outliers_zscore_count": 3,
+        "has_frequency_spike": false,
+        "top_frequent_value": 431.98,
+        "top_frequency_ratio": 0.0006,
+        "anomalies_detected": [
+          "EXTREME_OUTLIERS_COUNT_3",
+          "HIGH_SKEWNESS_40.8"
+        ],
+        "health_status": "ANOMALY_FLAGGED",
+        "dataset": "fct_orders"
+      }
+    ],
+    "fct_order_items": [
+      {
+        "column": "quantity",
+        "count": 12500,
+        "min": -5.0,
+        "max": 5.0,
+        "mean": 2.9966,
+        "std": 1.4632,
+        "median": 3.0,
+        "q25": 2.0,
+        "q75": 4.0,
+        "iqr": 2.0,
+        "skewness": -0.3196,
+        "kurtosis": 0.1863,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 15,
+        "outliers_zscore_count": 31,
+        "has_frequency_spike": true,
+        "top_frequent_value": 5.0,
+        "top_frequency_ratio": 0.2024,
+        "anomalies_detected": [
+          "EXTREME_OUTLIERS_COUNT_15",
+          "ANOMALOUS_VALUE_SPIKE_5.0_AT_20.2%"
+        ],
+        "health_status": "ANOMALY_FLAGGED",
+        "dataset": "fct_order_items"
+      },
+      {
+        "column": "unit_price",
+        "count": 12500,
+        "min": 9.19,
+        "max": 1067.26,
+        "mean": 432.361,
+        "std": 249.0144,
+        "median": 420.06,
+        "q25": 232.43,
+        "q75": 601.69,
+        "iqr": 369.26,
+        "skewness": 0.319,
+        "kurtosis": -0.6749,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 0,
+        "outliers_zscore_count": 0,
+        "has_frequency_spike": false,
+        "top_frequent_value": 161.74,
+        "top_frequency_ratio": 0.0029,
+        "anomalies_detected": [],
+        "health_status": "HEALTHY",
+        "dataset": "fct_order_items"
+      },
+      {
+        "column": "discount_rate",
+        "count": 12500,
+        "min": 0.0,
+        "max": 2.48,
+        "mean": 0.0392,
+        "std": 0.1003,
+        "median": 0.0,
+        "q25": 0.0,
+        "q75": 0.05,
+        "iqr": 0.05,
+        "skewness": 15.5008,
+        "kurtosis": 324.563,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 25,
+        "outliers_zscore_count": 25,
+        "has_frequency_spike": false,
+        "top_frequent_value": 0.0,
+        "top_frequency_ratio": 0.5954,
+        "anomalies_detected": [
+          "EXTREME_OUTLIERS_COUNT_25",
+          "HIGH_SKEWNESS_15.5"
+        ],
+        "health_status": "ANOMALY_FLAGGED",
+        "dataset": "fct_order_items"
+      },
+      {
+        "column": "total_item_price",
+        "count": 12500,
+        "min": 8.27,
+        "max": 5336.3,
+        "mean": 1268.3067,
+        "std": 1014.8945,
+        "median": 984.73,
+        "q25": 474.08,
+        "q75": 1828.81,
+        "iqr": 1354.73,
+        "skewness": 1.1036,
+        "kurtosis": 0.8054,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 0,
+        "outliers_zscore_count": 42,
+        "has_frequency_spike": false,
+        "top_frequent_value": 308.34,
+        "top_frequency_ratio": 0.0007,
+        "anomalies_detected": [],
+        "health_status": "HEALTHY",
+        "dataset": "fct_order_items"
+      }
+    ],
+    "fct_payments": [
+      {
+        "column": "amount_paid",
+        "count": 5200,
+        "min": 19.15,
+        "max": 944.94,
+        "mean": 442.0025,
+        "std": 242.8064,
+        "median": 433.22,
+        "q25": 233.395,
+        "q75": 645.74,
+        "iqr": 412.345,
+        "skewness": 0.0682,
+        "kurtosis": -1.112,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 0,
+        "outliers_zscore_count": 0,
+        "has_frequency_spike": false,
+        "top_frequent_value": 223.15,
+        "top_frequency_ratio": 0.0012,
+        "anomalies_detected": [],
+        "health_status": "HEALTHY",
+        "dataset": "fct_payments"
+      },
+      {
+        "column": "fee_amount",
+        "count": 5200,
+        "min": 0.78,
+        "max": 23.24,
+        "mean": 11.3512,
+        "std": 6.0682,
+        "median": 11.135,
+        "q25": 6.13,
+        "q75": 16.44,
+        "iqr": 10.31,
+        "skewness": 0.0677,
+        "kurtosis": -1.1118,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 0,
+        "outliers_zscore_count": 0,
+        "has_frequency_spike": false,
+        "top_frequent_value": 6.12,
+        "top_frequency_ratio": 0.0027,
+        "anomalies_detected": [],
+        "health_status": "HEALTHY",
+        "dataset": "fct_payments"
+      }
+    ],
+    "fct_shipments": [
+      {
+        "column": "shipping_cost",
+        "count": 4800,
+        "min": 5.5,
+        "max": 44.99,
+        "mean": 25.421,
+        "std": 11.4025,
+        "median": 25.45,
+        "q25": 15.47,
+        "q75": 35.43,
+        "iqr": 19.96,
+        "skewness": -0.0257,
+        "kurtosis": -1.2037,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 0,
+        "outliers_zscore_count": 0,
+        "has_frequency_spike": false,
+        "top_frequent_value": 23.57,
+        "top_frequency_ratio": 0.0013,
+        "anomalies_detected": [],
+        "health_status": "HEALTHY",
+        "dataset": "fct_shipments"
+      }
+    ],
+    "fct_inventory": [
+      {
+        "column": "stock_on_hand",
+        "count": 1600,
+        "min": 20.0,
+        "max": 1499.0,
+        "mean": 773.6187,
+        "std": 421.3243,
+        "median": 781.0,
+        "q25": 419.0,
+        "q75": 1137.75,
+        "iqr": 718.75,
+        "skewness": -0.035,
+        "kurtosis": -1.1549,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 0,
+        "outliers_zscore_count": 0,
+        "has_frequency_spike": false,
+        "top_frequent_value": 1374.0,
+        "top_frequency_ratio": 0.0037,
+        "anomalies_detected": [],
+        "health_status": "HEALTHY",
+        "dataset": "fct_inventory"
+      },
+      {
+        "column": "stock_reserved",
+        "count": 1600,
+        "min": 1.0,
+        "max": 368.0,
+        "mean": 112.825,
+        "std": 78.6775,
+        "median": 97.0,
+        "q25": 50.0,
+        "q75": 163.0,
+        "iqr": 113.0,
+        "skewness": 0.774,
+        "kurtosis": 0.0037,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 0,
+        "outliers_zscore_count": 0,
+        "has_frequency_spike": false,
+        "top_frequent_value": 77.0,
+        "top_frequency_ratio": 0.0094,
+        "anomalies_detected": [],
+        "health_status": "HEALTHY",
+        "dataset": "fct_inventory"
+      },
+      {
+        "column": "reorder_point",
+        "count": 1488,
+        "min": 50.0,
+        "max": 300.0,
+        "mean": 175.4489,
+        "std": 73.0508,
+        "median": 177.0,
+        "q25": 112.75,
+        "q75": 239.0,
+        "iqr": 126.25,
+        "skewness": 0.0112,
+        "kurtosis": -1.2261,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 0,
+        "outliers_zscore_count": 0,
+        "has_frequency_spike": false,
+        "top_frequent_value": 283.0,
+        "top_frequency_ratio": 0.0087,
+        "anomalies_detected": [],
+        "health_status": "HEALTHY",
+        "dataset": "fct_inventory"
+      }
+    ],
+    "fct_customer_interactions": [
+      {
+        "column": "rating_score",
+        "count": 3200,
+        "min": 1.0,
+        "max": 10.0,
+        "mean": 3.6244,
+        "std": 1.3328,
+        "median": 4.0,
+        "q25": 3.0,
+        "q75": 5.0,
+        "iqr": 2.0,
+        "skewness": 0.0881,
+        "kurtosis": 1.6453,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 0,
+        "outliers_zscore_count": 22,
+        "has_frequency_spike": true,
+        "top_frequent_value": 4.0,
+        "top_frequency_ratio": 0.3538,
+        "anomalies_detected": [
+          "ANOMALOUS_VALUE_SPIKE_4.0_AT_35.4%"
+        ],
+        "health_status": "ANOMALY_FLAGGED",
+        "dataset": "fct_customer_interactions"
+      },
+      {
+        "column": "resolution_time_mins",
+        "count": 3200,
+        "min": 5.0,
+        "max": 64314.0,
+        "mean": 357.1095,
+        "std": 4111.775,
+        "median": 36.7,
+        "q25": 17.875,
+        "q75": 68.225,
+        "iqr": 50.35,
+        "skewness": 13.4824,
+        "kurtosis": 182.1166,
+        "is_zero_variance": false,
+        "outliers_iqr_extreme_count": 40,
+        "outliers_zscore_count": 18,
+        "has_frequency_spike": false,
+        "top_frequent_value": 11.8,
+        "top_frequency_ratio": 0.0037,
+        "anomalies_detected": [
+          "EXTREME_OUTLIERS_COUNT_40",
+          "HIGH_SKEWNESS_13.48"
+        ],
+        "health_status": "ANOMALY_FLAGGED",
+        "dataset": "fct_customer_interactions"
+      }
+    ]
+  },
+  "global_metrics": {
+    "total_rows": 35600,
+    "total_cells": 319600,
+    "total_null_cells": 2233,
+    "total_columns": 73,
+    "overall_completeness_rate": 99.3,
+    "zero_variance_columns": [
+      "fct_payments.currency",
+      "fct_shipments.destination_country",
+      "fct_inventory.warehouse_id"
+    ],
+    "extreme_outlier_columns": [
+      {
+        "dataset": "dim_products",
+        "column": "unit_cost",
+        "outlier_count": 11
+      },
+      {
+        "dataset": "dim_products",
+        "column": "weight_kg",
+        "outlier_count": 15
+      },
+      {
+        "dataset": "fct_orders",
+        "column": "subtotal_amount",
+        "outlier_count": 3
+      },
+      {
+        "dataset": "fct_orders",
+        "column": "discount_amount",
+        "outlier_count": 34
+      },
+      {
+        "dataset": "fct_orders",
+        "column": "total_amount",
+        "outlier_count": 3
+      },
+      {
+        "dataset": "fct_order_items",
+        "column": "quantity",
+        "outlier_count": 15
+      },
+      {
+        "dataset": "fct_order_items",
+        "column": "discount_rate",
+        "outlier_count": 25
+      },
+      {
+        "dataset": "fct_customer_interactions",
+        "column": "resolution_time_mins",
+        "outlier_count": 40
+      }
+    ]
+  }
+}

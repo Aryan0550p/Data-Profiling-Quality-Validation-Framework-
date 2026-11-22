@@ -1,0 +1,9 @@
+dataset_key,dataset_name,description,primary_key,domain,owner_team,row_count,column_count,memory_usage_mb,completeness_pct
+1,dim_customers,Master customer profile and demographic dimensions,customer_id,Customer Domain,Marketing & Growth Analytics,2500,10,1.394,98.87
+2,dim_products,Product catalog and pricing master data,product_id,Merchandising Domain,Supply Chain & Operations Analytics,800,10,0.305,100.0
+3,fct_orders,Header-level order transactions and financial summary,order_id,Sales & Commerce Domain,Financial & Revenue Analytics,5000,11,2.103,99.64
+4,fct_order_items,Line-item level order fulfillment and product details,item_id,Fulfillment Domain,Financial & Revenue Analytics,12500,8,3.197,100.0
+5,fct_payments,Financial payment transaction logs and gateway reconciliations,payment_id,Financial Domain,Financial & Revenue Analytics,5200,9,2.136,99.5
+6,fct_shipments,Logistics and shipping tracking lifecycle events,shipment_id,Logistics Domain,Supply Chain & Operations Analytics,4800,10,2.47,97.07
+7,fct_inventory,Warehouse inventory snapshot levels and restock thresholds,inventory_id,Supply Chain Domain,Supply Chain & Operations Analytics,1600,7,0.394,99.0
+8,fct_customer_interactions,"Customer support interactions, tickets, and CSAT scores",interaction_id,Support & CRM Domain,Marketing & Growth Analytics,3200,8,0.972,100.0

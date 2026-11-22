@@ -1,0 +1,53 @@
+rule_key,rule_code,expectation_type,dataset_name,target_column,dimension,severity,description,associated_issue_id
+1,RULE-001,expect_column_values_to_not_be_null,dim_customers,customer_id,completeness,CRITICAL,Customer ID must not be null,BASELINE_CHECK
+2,RULE-002,expect_column_values_to_be_unique,dim_customers,customer_id,consistency,CRITICAL,Customer ID must be primary key unique,BASELINE_CHECK
+3,RULE-003,expect_column_values_to_not_be_null,dim_customers,email,completeness,HIGH,Customer contact email must be populated,ISSUE-01
+4,RULE-004,expect_column_values_to_be_unique,dim_customers,email,consistency,MEDIUM,Customer email addresses must be globally unique across profiles,ISSUE-12
+5,RULE-005,expect_conditional_column_values_to_not_be_null,dim_customers,phone,completeness,LOW,VIP and Corporate customers must have telephone numbers,ISSUE-05
+6,RULE-006,expect_column_values_to_match_regex,dim_customers,postal_code,accuracy,LOW,US postal codes must conform to standard 5-digit or 9-digit ZIP regex,ISSUE-16
+7,RULE-007,expect_column_values_to_be_in_set,dim_customers,customer_segment,accuracy,MEDIUM,Segment must belong to allowed business categories,BASELINE_CHECK
+8,RULE-008,expect_column_values_to_be_in_set,dim_customers,status,accuracy,MEDIUM,Customer status must be within allowed enum values,BASELINE_CHECK
+9,RULE-009,expect_column_values_to_not_be_null,dim_products,product_id,completeness,CRITICAL,Product ID must not be null,BASELINE_CHECK
+10,RULE-010,expect_column_values_to_be_unique,dim_products,product_id,consistency,CRITICAL,Product ID must be unique primary key,BASELINE_CHECK
+11,RULE-011,expect_column_values_to_not_be_null,dim_products,product_name,completeness,HIGH,Product name cannot be null,BASELINE_CHECK
+12,RULE-012,expect_column_pair_values_a_to_be_greater_than_b,dim_products,MULTI_COLUMN,accuracy,HIGH,Product unit_price must exceed unit_cost (positive gross margin),ISSUE-17
+13,RULE-013,expect_column_values_to_be_between,dim_products,unit_price,accuracy,MEDIUM,Unit price must be positive and within reasonable catalog limits,BASELINE_CHECK
+14,RULE-014,expect_column_quantile_values_to_be_between,dim_products,weight_kg,distribution,HIGH,Product weight must not contain extreme anomalies (> 50kg for retail),ISSUE-22
+15,RULE-015,expect_column_values_to_be_in_set,dim_products,category,accuracy,MEDIUM,Category must conform to official merchandising taxonomy,BASELINE_CHECK
+16,RULE-016,expect_column_values_to_not_be_null,fct_orders,order_id,completeness,CRITICAL,Order ID must not be null,BASELINE_CHECK
+17,RULE-017,expect_column_values_to_be_unique,fct_orders,order_id,consistency,CRITICAL,Order ID must be unique primary key,BASELINE_CHECK
+18,RULE-018,expect_column_values_to_not_be_null,fct_orders,customer_id,completeness,CRITICAL,Orders must be associated with a valid customer_id,ISSUE-02
+19,RULE-019,expect_foreign_key_to_exist,fct_orders,customer_id,consistency,CRITICAL,Order customer_id must exist in dim_customers master,BASELINE_CHECK
+20,RULE-020,expect_column_values_to_be_in_set,fct_orders,currency,consistency,MEDIUM,Order currency must be standardized to ISO-4217 uppercase 'USD',ISSUE-09
+21,RULE-021,expect_column_values_to_be_between,fct_orders,total_amount,distribution,CRITICAL,"Order total must be free of extreme synthetic QA test amounts ($9,999,999)",ISSUE-19
+22,RULE-022,expect_column_distribution_anomaly_check,fct_orders,discount_amount,distribution,MEDIUM,Discount amount must not exhibit rounding clusters of $0.01,ISSUE-23
+23,RULE-023,expect_cross_table_status_concordance,fct_orders,MULTI_COLUMN,consistency,HIGH,Cancelled orders must not have conflicting Delivered status in shipments,ISSUE-08
+24,RULE-024,expect_column_values_to_be_in_set,fct_orders,order_status,accuracy,HIGH,Order status must be within the supported lifecycle states,BASELINE_CHECK
+25,RULE-025,expect_column_values_to_not_be_null,fct_order_items,item_id,completeness,CRITICAL,Line Item ID cannot be null,BASELINE_CHECK
+26,RULE-026,expect_column_values_to_be_unique,fct_order_items,item_id,consistency,CRITICAL,Item ID must be unique primary key,BASELINE_CHECK
+27,RULE-027,expect_foreign_key_to_exist,fct_order_items,product_id,consistency,CRITICAL,Order items product_id must exist in active product catalog master,ISSUE-07
+28,RULE-028,expect_column_values_to_be_between,fct_order_items,quantity,accuracy,CRITICAL,Item quantity must be strictly positive (no negative returns in sales ledger),ISSUE-13
+29,RULE-029,expect_column_values_to_be_between,fct_order_items,discount_rate,accuracy,HIGH,Discount rate must be bounded between 0% and 100% (0.0 to 1.0),ISSUE-14
+30,RULE-030,expect_column_values_to_be_in_set,fct_order_items,fulfillment_status,accuracy,MEDIUM,Fulfillment status must match allowed lifecycle codes,BASELINE_CHECK
+31,RULE-031,expect_column_values_to_not_be_null,fct_payments,payment_id,completeness,CRITICAL,Payment ID must not be null,BASELINE_CHECK
+32,RULE-032,expect_column_values_to_be_unique,fct_payments,payment_id,consistency,CRITICAL,Payment ID must be unique primary key,BASELINE_CHECK
+33,RULE-033,expect_conditional_column_values_to_not_be_null,fct_payments,gateway_transaction_id,completeness,CRITICAL,Settled payments with status 'Success' must have gateway transaction ID,ISSUE-06
+34,RULE-034,expect_payment_amount_to_match_order_total,fct_payments,MULTI_COLUMN,consistency,CRITICAL,Settled payment amount must reconcile identically with order total,ISSUE-11
+35,RULE-035,expect_column_values_to_be_in_set,fct_payments,payment_status,accuracy,HIGH,Payment status must match allowed gateway statuses,BASELINE_CHECK
+36,RULE-036,expect_column_values_to_not_be_null,fct_shipments,shipment_id,completeness,CRITICAL,Shipment ID must not be null,BASELINE_CHECK
+37,RULE-037,expect_column_values_to_be_unique,fct_shipments,shipment_id,consistency,CRITICAL,Shipment ID must be unique primary key,BASELINE_CHECK
+38,RULE-038,expect_conditional_column_values_to_not_be_null,fct_shipments,delivered_date,completeness,HIGH,Shipments marked 'Delivered' must record delivered_date timestamp,ISSUE-03
+39,RULE-039,expect_cross_table_temporal_order,fct_shipments,MULTI_COLUMN,consistency,HIGH,Temporal causality: shipped_date must occur chronologically after order_date,ISSUE-10
+40,RULE-040,expect_column_values_to_be_in_set,fct_shipments,shipping_status,accuracy,HIGH,Shipping status must belong to standard carrier milestones,BASELINE_CHECK
+41,RULE-041,expect_column_values_to_be_in_set,fct_shipments,carrier,accuracy,MEDIUM,Carrier must be an approved logistics provider,BASELINE_CHECK
+42,RULE-042,expect_column_values_to_not_be_null,fct_inventory,inventory_id,completeness,CRITICAL,Inventory ID must not be null,BASELINE_CHECK
+43,RULE-043,expect_column_values_to_be_unique,fct_inventory,inventory_id,consistency,CRITICAL,Inventory ID must be unique primary key,BASELINE_CHECK
+44,RULE-044,expect_column_values_to_not_be_null,fct_inventory,reorder_point,completeness,MEDIUM,Inventory stock records must define an active reorder_point threshold,ISSUE-04
+45,RULE-045,expect_column_unique_value_count_to_be_greater_than,fct_inventory,warehouse_id,distribution,LOW,Warehouse location must not be a zero-variance degenerate constant ('WH-DEFAULT'),ISSUE-20
+46,RULE-046,expect_column_values_to_be_between,fct_inventory,stock_on_hand,accuracy,HIGH,Stock on hand cannot be negative,BASELINE_CHECK
+47,RULE-047,expect_column_values_to_not_be_null,fct_customer_interactions,interaction_id,completeness,CRITICAL,Interaction ID must not be null,BASELINE_CHECK
+48,RULE-048,expect_column_values_to_be_unique,fct_customer_interactions,interaction_id,consistency,CRITICAL,Interaction ID must be unique primary key,BASELINE_CHECK
+49,RULE-049,expect_column_values_to_be_past_or_current,fct_customer_interactions,interaction_date,accuracy,MEDIUM,Interaction timestamps must not be set to future dates,ISSUE-15
+50,RULE-050,expect_column_values_to_be_between,fct_customer_interactions,rating_score,accuracy,MEDIUM,CSAT rating scores must fall strictly within the 1 to 5 scale,ISSUE-18
+51,RULE-051,expect_column_values_to_be_between,fct_customer_interactions,resolution_time_mins,distribution,MEDIUM,Ticket resolution time must not have idle extreme outliers (> 48 hours / 2880 mins),ISSUE-21
+52,RULE-052,expect_column_values_to_be_in_set,fct_customer_interactions,channel,accuracy,LOW,Support channel must match accepted CRM communication avenues,BASELINE_CHECK

@@ -1,0 +1,160 @@
+{
+  "evaluation_parameters": {},
+  "meta": {
+    "expectation_suite_name": "fct_shipments_quality_suite",
+    "run_id": "RUN-20261122T132543Z",
+    "dataset_name": "fct_shipments",
+    "validation_time": "2026-11-22T13:25:43.997152"
+  },
+  "success": false,
+  "statistics": {
+    "evaluated_expectations": 6,
+    "successful_expectations": 4,
+    "unsuccessful_expectations": 2,
+    "success_percent": 66.67
+  },
+  "results": [
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "column": "shipment_id"
+        },
+        "meta": {
+          "dimension": "completeness",
+          "severity": "CRITICAL",
+          "description": "Shipment ID must not be null"
+        }
+      },
+      "result": {
+        "element_count": 4800,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "4800/4800 non-null"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_unique",
+        "kwargs": {
+          "column": "shipment_id"
+        },
+        "meta": {
+          "dimension": "consistency",
+          "severity": "CRITICAL",
+          "description": "Shipment ID must be unique primary key"
+        }
+      },
+      "result": {
+        "element_count": 4800,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "4800 unique of 4800"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_conditional_column_values_to_not_be_null",
+        "kwargs": {
+          "column": "delivered_date",
+          "condition_column": "shipping_status",
+          "condition_values": [
+            "Delivered"
+          ]
+        },
+        "meta": {
+          "dimension": "completeness",
+          "severity": "HIGH",
+          "issue_id": "ISSUE-03",
+          "impacted_team": "Supply Chain & Operations Analytics",
+          "description": "Shipments marked 'Delivered' must record delivered_date timestamp"
+        }
+      },
+      "result": {
+        "element_count": 3605,
+        "unexpected_count": 210,
+        "unexpected_percent": 5.83,
+        "observed_value": "210 nulls in 3605 conditioned rows"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_cross_table_temporal_order",
+        "kwargs": {
+          "shipment_date_col": "shipped_date",
+          "order_dataset": "fct_orders",
+          "order_date_col": "order_date"
+        },
+        "meta": {
+          "dimension": "consistency",
+          "severity": "HIGH",
+          "issue_id": "ISSUE-10",
+          "impacted_team": "Supply Chain & Operations Analytics",
+          "description": "Temporal causality: shipped_date must occur chronologically after order_date"
+        }
+      },
+      "result": {
+        "element_count": 4800,
+        "unexpected_count": 38,
+        "unexpected_percent": 0.79,
+        "observed_value": "38 retro-causal shipments"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "column": "shipping_status",
+          "value_set": [
+            "Delivered",
+            "In Transit",
+            "Failed Delivery",
+            "Returned"
+          ]
+        },
+        "meta": {
+          "dimension": "accuracy",
+          "severity": "HIGH",
+          "description": "Shipping status must belong to standard carrier milestones"
+        }
+      },
+      "result": {
+        "element_count": 4800,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "0 unexpected values outside allowed set"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "column": "carrier",
+          "value_set": [
+            "FedEx",
+            "UPS",
+            "DHL",
+            "USPS"
+          ]
+        },
+        "meta": {
+          "dimension": "accuracy",
+          "severity": "MEDIUM",
+          "description": "Carrier must be an approved logistics provider"
+        }
+      },
+      "result": {
+        "element_count": 4800,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "0 unexpected values outside allowed set"
+      }
+    }
+  ]
+}

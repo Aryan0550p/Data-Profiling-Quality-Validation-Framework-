@@ -1,0 +1,94 @@
+{
+  "expectation_suite_name": "fct_customer_interactions_quality_suite",
+  "data_asset_type": "Dataset",
+  "meta": {
+    "great_expectations_version": "0.18.12",
+    "dataset_name": "fct_customer_interactions",
+    "target_columns": 8,
+    "description": "Automated Great Expectations suite for fct_customer_interactions"
+  },
+  "expectations": [
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "interaction_id"
+      },
+      "meta": {
+        "dimension": "completeness",
+        "severity": "CRITICAL",
+        "description": "Interaction ID must not be null"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "interaction_id"
+      },
+      "meta": {
+        "dimension": "consistency",
+        "severity": "CRITICAL",
+        "description": "Interaction ID must be unique primary key"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_past_or_current",
+      "kwargs": {
+        "column": "interaction_date"
+      },
+      "meta": {
+        "dimension": "accuracy",
+        "severity": "MEDIUM",
+        "issue_id": "ISSUE-15",
+        "impacted_team": "Marketing & Growth Analytics",
+        "description": "Interaction timestamps must not be set to future dates"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "rating_score",
+        "min_value": 1,
+        "max_value": 5
+      },
+      "meta": {
+        "dimension": "accuracy",
+        "severity": "MEDIUM",
+        "issue_id": "ISSUE-18",
+        "impacted_team": "Marketing & Growth Analytics",
+        "description": "CSAT rating scores must fall strictly within the 1 to 5 scale"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "resolution_time_mins",
+        "min_value": 0.0,
+        "max_value": 2880.0
+      },
+      "meta": {
+        "dimension": "distribution",
+        "severity": "MEDIUM",
+        "issue_id": "ISSUE-21",
+        "impacted_team": "Marketing & Growth Analytics",
+        "description": "Ticket resolution time must not have idle extreme outliers (> 48 hours / 2880 mins)"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "channel",
+        "value_set": [
+          "Email",
+          "Chat",
+          "Phone",
+          "Social Media"
+        ]
+      },
+      "meta": {
+        "dimension": "accuracy",
+        "severity": "LOW",
+        "description": "Support channel must match accepted CRM communication avenues"
+      }
+    }
+  ]
+}

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Data Profiling, Quality & Validation Report</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --primary: #38bdf8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            padding: 2rem;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+        .header h1 { font-size: 1.875rem; font-weight: 700; color: var(--text-primary); }
+        .header p { color: var(--text-secondary); font-size: 0.875rem; margin-top: 0.25rem; }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+        .kpi-card {
+            background: var(--bg-card);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .kpi-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+        .kpi-title { font-size: 0.825rem; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; }
+        .kpi-value { font-size: 2rem; font-weight: 800; line-height: 1.2; margin: 0.25rem 0; }
+        .kpi-target { font-size: 0.75rem; color: var(--text-secondary); }
+        .badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .dim-pill {
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .dim-completeness { background: #0284c722; color: #38bdf8; border: 1px solid #38bdf855; }
+        .dim-consistency { background: #8b5cf622; color: #a78bfa; border: 1px solid #a78bfa55; }
+        .dim-accuracy { background: #f59e0b22; color: #fbbf24; border: 1px solid #fbbf2455; }
+        .dim-distribution { background: #ec489922; color: #f472b6; border: 1px solid #f472b655; }
+        .team-tag {
+            background: #334155;
+            color: #cbd5e1;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        .dimension-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .dim-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+        .dim-box h4 { font-size: 0.875rem; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 0.5rem; }
+        .dim-box .score { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+        th {
+            background: #1e293b;
+            color: var(--text-secondary);
+            font-weight: 600;
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+        td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+        tr:hover td { background: var(--bg-card-hover); }
+        code {
+            background: #0f172a;
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.8rem;
+            color: #38bdf8;
+        }
+        .issue-id {
+            font-weight: 700;
+            color: #f43f5e;
+            background: #f43f5e15;
+            border: 1px solid #f43f5e33;
+        }
+        .progress-bar-container {
+            width: 100px;
+            height: 8px;
+            background: #334155;
+            border-radius: 9999px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+        .progress-bar { height: 100%; border-radius: 9999px; }
+        .text-muted { color: var(--text-secondary); font-size: 0.75rem; }
+        .remediation-cell { font-size: 0.8rem; color: #cbd5e1; max-width: 320px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <h1>Data Profiling, Quality & Validation Framework</h1>
+            <p>Automated Great Expectations + pandas Validation Pipeline | 8 Enterprise Datasets | 73 Profiled Columns</p>
+        </div>
+        <div style="text-align: right;">
+            <span class="badge" style="background: #38bdf822; color: #38bdf8; border: 1px solid #38bdf855;">Execution: 20261122T132543Z</span>
+        </div>
+    </div>
+
+    <!-- 6 CORE QUALITY KPIS -->
+    <div class="section-title">6 Core Data Quality KPIs</div>
+    <div class="kpi-grid">
+        
+            <div class="kpi-card" style="border-top: 4px solid #ef4444; background: rgba(239, 68, 68, 0.08);">
+                <div class="kpi-header">
+                    <span class="kpi-title">Overall Data Quality Index</span>
+                    <span class="badge" style="background:#ef444422; color:#ef4444; border: 1px solid #ef444455;">CRITICAL</span>
+                </div>
+                <div class="kpi-value" style="color: #ef4444;">54.17%</div>
+                <div class="kpi-target">Target SLA: <strong>95.0%</strong></div>
+            </div>
+            
+            <div class="kpi-card" style="border-top: 4px solid #ef4444; background: rgba(239, 68, 68, 0.08);">
+                <div class="kpi-header">
+                    <span class="kpi-title">Completeness Rate</span>
+                    <span class="badge" style="background:#ef444422; color:#ef4444; border: 1px solid #ef444455;">CRITICAL</span>
+                </div>
+                <div class="kpi-value" style="color: #ef4444;">60.0%</div>
+                <div class="kpi-target">Target SLA: <strong>98.0%</strong></div>
+            </div>
+            
+            <div class="kpi-card" style="border-top: 4px solid #ef4444; background: rgba(239, 68, 68, 0.08);">
+                <div class="kpi-header">
+                    <span class="kpi-title">Consistency & Referential Integrity Rate</span>
+                    <span class="badge" style="background:#ef444422; color:#ef4444; border: 1px solid #ef444455;">CRITICAL</span>
+                </div>
+                <div class="kpi-value" style="color: #ef4444;">60.0%</div>
+                <div class="kpi-target">Target SLA: <strong>99.0%</strong></div>
+            </div>
+            
+            <div class="kpi-card" style="border-top: 4px solid #ef4444; background: rgba(239, 68, 68, 0.08);">
+                <div class="kpi-header">
+                    <span class="kpi-title">Accuracy & Validity Rate</span>
+                    <span class="badge" style="background:#ef444422; color:#ef4444; border: 1px solid #ef444455;">CRITICAL</span>
+                </div>
+                <div class="kpi-value" style="color: #ef4444;">64.71%</div>
+                <div class="kpi-target">Target SLA: <strong>98.5%</strong></div>
+            </div>
+            
+            <div class="kpi-card" style="border-top: 4px solid #ef4444; background: rgba(239, 68, 68, 0.08);">
+                <div class="kpi-header">
+                    <span class="kpi-title">Distribution & Statistical Health Score</span>
+                    <span class="badge" style="background:#ef444422; color:#ef4444; border: 1px solid #ef444455;">CRITICAL</span>
+                </div>
+                <div class="kpi-value" style="color: #ef4444;">0.0%</div>
+                <div class="kpi-target">Target SLA: <strong>96.0%</strong></div>
+            </div>
+            
+            <div class="kpi-card" style="border-top: 4px solid #10b981; background: rgba(16, 185, 129, 0.08);">
+                <div class="kpi-header">
+                    <span class="kpi-title">Freshness & Timeliness SLA Compliance Rate</span>
+                    <span class="badge" style="background:#10b98122; color:#10b981; border: 1px solid #10b98155;">PASS</span>
+                </div>
+                <div class="kpi-value" style="color: #10b981;">99.8%</div>
+                <div class="kpi-target">Target SLA: <strong>99.5%</strong></div>
+            </div>
+            
+    </div>
+
+    <!-- 4 QUALITY DIMENSIONS HEALTH -->
+    <div class="section-title">Quality Dimension Health Breakdown</div>
+    <div class="dimension-grid">
+        <div class="dim-box">
+            <h4>Completeness</h4>
+            <div class="score" style="color: #38bdf8;">60.0%</div>
+            <div class="text-muted">9/15 Rules Passing</div>
+        </div>
+        <div class="dim-box">
+            <h4>Consistency</h4>
+            <div class="score" style="color: #a78bfa;">60.0%</div>
+            <div class="text-muted">9/15 Rules Passing</div>
+        </div>
+        <div class="dim-box">
+            <h4>Accuracy</h4>
+            <div class="score" style="color: #fbbf24;">64.71%</div>
+            <div class="text-muted">11/17 Rules Passing</div>
+        </div>
+        <div class="dim-box">
+            <h4>Distribution</h4>
+            <div class="score" style="color: #f472b6;">0.0%</div>
+            <div class="text-muted">0/5 Rules Passing</div>
+        </div>
+    </div>
+
+    <!-- 23 FLAGGED DATA QUALITY ISSUES -->
+    <div class="section-title">Flagged Data Quality Issues & Root Causes (23 Issues)</div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Issue ID</th>
+                    <th>Dataset</th>
+                    <th>Column</th>
+                    <th>Dimension</th>
+                    <th>Severity</th>
+                    <th>Violations</th>
+                    <th>Description</th>
+                    <th>Downstream Team</th>
+                    <th>Remediation Playbook</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            <tr>
+                <td><code class="issue-id">ISSUE-01</code></td>
+                <td><strong>dim_customers</strong></td>
+                <td><code>email</code></td>
+                <td><span class="dim-pill dim-completeness">Completeness</span></td>
+                <td><span class="badge" style="background:#f9731622; color:#f97316; border: 1px solid #f9731666;">HIGH</span></td>
+                <td><strong>122</strong> <span class="text-muted">(4.88%)</span></td>
+                <td>Customer contact email must be populated</td>
+                <td><span class="team-tag">Marketing & Growth Analytics</span></td>
+                <td class="remediation-cell">Apply deterministic placeholder email format (guest_<cust_id>@unregistered.internal) and enforce email validation at signup UI.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-12</code></td>
+                <td><strong>dim_customers</strong></td>
+                <td><code>email</code></td>
+                <td><span class="dim-pill dim-consistency">Consistency</span></td>
+                <td><span class="badge" style="background:#3b82f622; color:#3b82f6; border: 1px solid #3b82f666;">MEDIUM</span></td>
+                <td><strong>56</strong> <span class="text-muted">(2.35%)</span></td>
+                <td>Customer email addresses must be globally unique across profiles</td>
+                <td><span class="team-tag">Marketing & Growth Analytics</span></td>
+                <td class="remediation-cell">Apply LOWER(TRIM(email)) in ETL merge pipeline; merge duplicate customer histories into primary canonical customer UUID.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-05</code></td>
+                <td><strong>dim_customers</strong></td>
+                <td><code>phone</code></td>
+                <td><span class="dim-pill dim-completeness">Completeness</span></td>
+                <td><span class="badge" style="background:#64748b22; color:#64748b; border: 1px solid #64748b66;">LOW</span></td>
+                <td><strong>160</strong> <span class="text-muted">(25.76%)</span></td>
+                <td>VIP and Corporate customers must have telephone numbers</td>
+                <td><span class="team-tag">Marketing & Growth Analytics</span></td>
+                <td class="remediation-cell">Trigger automated in-app profile completion prompt for tier upgrade qualification; fall back to billing telephone record.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-16</code></td>
+                <td><strong>dim_customers</strong></td>
+                <td><code>postal_code</code></td>
+                <td><span class="dim-pill dim-accuracy">Accuracy</span></td>
+                <td><span class="badge" style="background:#64748b22; color:#64748b; border: 1px solid #64748b66;">LOW</span></td>
+                <td><strong>78</strong> <span class="text-muted">(4.15%)</span></td>
+                <td>US postal codes must conform to standard 5-digit or 9-digit ZIP regex</td>
+                <td><span class="team-tag">Marketing & Growth Analytics</span></td>
+                <td class="remediation-cell">Cleanse string with regex extraction r'^(\d{5})(-\d{4})?$'; integrate USPS Address Verification API at checkout.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-17</code></td>
+                <td><strong>dim_products</strong></td>
+                <td><code></code></td>
+                <td><span class="dim-pill dim-accuracy">Accuracy</span></td>
+                <td><span class="badge" style="background:#f9731622; color:#f97316; border: 1px solid #f9731666;">HIGH</span></td>
+                <td><strong>24</strong> <span class="text-muted">(3.0%)</span></td>
+                <td>Product unit_price must exceed unit_cost (positive gross margin)</td>
+                <td><span class="team-tag">Financial & Revenue Analytics</span></td>
+                <td class="remediation-cell">Swap inverted cost and price attributes; notify merchant pricing team and halt automated clearance markdown rules.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-22</code></td>
+                <td><strong>dim_products</strong></td>
+                <td><code>weight_kg</code></td>
+                <td><span class="dim-pill dim-distribution">Distribution</span></td>
+                <td><span class="badge" style="background:#f9731622; color:#f97316; border: 1px solid #f9731666;">HIGH</span></td>
+                <td><strong>15</strong> <span class="text-muted">(1.88%)</span></td>
+                <td>Product weight must not contain extreme anomalies (> 50kg for retail)</td>
+                <td><span class="team-tag">Supply Chain & Operations Analytics</span></td>
+                <td class="remediation-cell">Apply conditional conversion (weight_kg = weight_kg / 1000) when category is 'Accessories' and weight > 50kg; update freight rate quotes.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-02</code></td>
+                <td><strong>fct_orders</strong></td>
+                <td><code>customer_id</code></td>
+                <td><span class="dim-pill dim-completeness">Completeness</span></td>
+                <td><span class="badge" style="background:#ef444422; color:#ef4444; border: 1px solid #ef444466;">CRITICAL</span></td>
+                <td><strong>200</strong> <span class="text-muted">(4.0%)</span></td>
+                <td>Orders must be associated with a valid customer_id</td>
+                <td><span class="team-tag">Marketing & Growth Analytics</span></td>
+                <td class="remediation-cell">Backfill customer_id from payment gateway payer email lookup; reject order creation events lacking customer UUID in Kafka topic.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-09</code></td>
+                <td><strong>fct_orders</strong></td>
+                <td><code>currency</code></td>
+                <td><span class="dim-pill dim-consistency">Consistency</span></td>
+                <td><span class="badge" style="background:#3b82f622; color:#3b82f6; border: 1px solid #3b82f666;">MEDIUM</span></td>
+                <td><strong>185</strong> <span class="text-muted">(3.7%)</span></td>
+                <td>Order currency must be standardized to ISO-4217 uppercase 'USD'</td>
+                <td><span class="team-tag">Financial & Revenue Analytics</span></td>
+                <td class="remediation-cell">Standardize ingestion to ISO-4217 3-letter currency codes via uppercase string transformation and strict enum validation.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-19</code></td>
+                <td><strong>fct_orders</strong></td>
+                <td><code>total_amount</code></td>
+                <td><span class="dim-pill dim-distribution">Distribution</span></td>
+                <td><span class="badge" style="background:#ef444422; color:#ef4444; border: 1px solid #ef444466;">CRITICAL</span></td>
+                <td><strong>3</strong> <span class="text-muted">(0.06%)</span></td>
+                <td>Order total must be free of extreme synthetic QA test amounts ($9,999,999)</td>
+                <td><span class="team-tag">Financial & Revenue Analytics</span></td>
+                <td class="remediation-cell">Exclude synthetic test account orders with flag is_test = TRUE; tag and isolate transactions exceeding 4 sigma from executive reporting.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-23</code></td>
+                <td><strong>fct_orders</strong></td>
+                <td><code>discount_amount</code></td>
+                <td><span class="dim-pill dim-distribution">Distribution</span></td>
+                <td><span class="badge" style="background:#3b82f622; color:#3b82f6; border: 1px solid #3b82f666;">MEDIUM</span></td>
+                <td><strong>480</strong> <span class="text-muted">(9.6%)</span></td>
+                <td>Discount amount must not exhibit rounding clusters of $0.01</td>
+                <td><span class="team-tag">Financial & Revenue Analytics</span></td>
+                <td class="remediation-cell">Absorb rounding fractions into payment processor fee account; eliminate spurious $0.01 promotional records.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-08</code></td>
+                <td><strong>fct_orders</strong></td>
+                <td><code></code></td>
+                <td><span class="dim-pill dim-consistency">Consistency</span></td>
+                <td><span class="badge" style="background:#f9731622; color:#f97316; border: 1px solid #f9731666;">HIGH</span></td>
+                <td><strong>244</strong> <span class="text-muted">(5.08%)</span></td>
+                <td>Cancelled orders must not have conflicting Delivered status in shipments</td>
+                <td><span class="team-tag">Supply Chain & Operations Analytics</span></td>
+                <td class="remediation-cell">Reconcile order state to 'Return_Pending'; auto-generate prepaid return label and trigger customer returns notification.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-07</code></td>
+                <td><strong>fct_order_items</strong></td>
+                <td><code>product_id</code></td>
+                <td><span class="dim-pill dim-consistency">Consistency</span></td>
+                <td><span class="badge" style="background:#ef444422; color:#ef4444; border: 1px solid #ef444466;">CRITICAL</span></td>
+                <td><strong>35</strong> <span class="text-muted">(0.28%)</span></td>
+                <td>Order items product_id must exist in active product catalog master</td>
+                <td><span class="team-tag">Financial & Revenue Analytics</span></td>
+                <td class="remediation-cell">Implement foreign key constraint with RESTRICT ON DELETE; restore soft-deleted product records with 'Archived' status.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-13</code></td>
+                <td><strong>fct_order_items</strong></td>
+                <td><code>quantity</code></td>
+                <td><span class="dim-pill dim-accuracy">Accuracy</span></td>
+                <td><span class="badge" style="background:#ef444422; color:#ef4444; border: 1px solid #ef444466;">CRITICAL</span></td>
+                <td><strong>45</strong> <span class="text-muted">(0.36%)</span></td>
+                <td>Item quantity must be strictly positive (no negative returns in sales ledger)</td>
+                <td><span class="team-tag">Financial & Revenue Analytics</span></td>
+                <td class="remediation-cell">Route negative adjustments to dedicated fct_returns table; enforce CHECK (quantity > 0) constraint in sales transaction schema.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-14</code></td>
+                <td><strong>fct_order_items</strong></td>
+                <td><code>discount_rate</code></td>
+                <td><span class="dim-pill dim-accuracy">Accuracy</span></td>
+                <td><span class="badge" style="background:#f9731622; color:#f97316; border: 1px solid #f9731666;">HIGH</span></td>
+                <td><strong>25</strong> <span class="text-muted">(0.2%)</span></td>
+                <td>Discount rate must be bounded between 0% and 100% (0.0 to 1.0)</td>
+                <td><span class="team-tag">Financial & Revenue Analytics</span></td>
+                <td class="remediation-cell">Cap discount rate at 1.0 (or max permissible promotional threshold 0.70); recalculate line total item price.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-06</code></td>
+                <td><strong>fct_payments</strong></td>
+                <td><code>gateway_transaction_id</code></td>
+                <td><span class="dim-pill dim-completeness">Completeness</span></td>
+                <td><span class="badge" style="background:#ef444422; color:#ef4444; border: 1px solid #ef444466;">CRITICAL</span></td>
+                <td><strong>234</strong> <span class="text-muted">(4.87%)</span></td>
+                <td>Settled payments with status 'Success' must have gateway transaction ID</td>
+                <td><span class="team-tag">Financial & Revenue Analytics</span></td>
+                <td class="remediation-cell">Require accounting clearing reference number for manual B2B transactions; enforce non-null constraint at payment service layer.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-11</code></td>
+                <td><strong>fct_payments</strong></td>
+                <td><code></code></td>
+                <td><span class="dim-pill dim-consistency">Consistency</span></td>
+                <td><span class="badge" style="background:#ef444422; color:#ef4444; border: 1px solid #ef444466;">CRITICAL</span></td>
+                <td><strong>73</strong> <span class="text-muted">(1.52%)</span></td>
+                <td>Settled payment amount must reconcile identically with order total</td>
+                <td><span class="team-tag">Financial & Revenue Analytics</span></td>
+                <td class="remediation-cell">Execute automated differential ledger refund or invoice adjustment; implement two-phase commit on cart checkout settlement.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-03</code></td>
+                <td><strong>fct_shipments</strong></td>
+                <td><code>delivered_date</code></td>
+                <td><span class="dim-pill dim-completeness">Completeness</span></td>
+                <td><span class="badge" style="background:#f9731622; color:#f97316; border: 1px solid #f9731666;">HIGH</span></td>
+                <td><strong>210</strong> <span class="text-muted">(5.83%)</span></td>
+                <td>Shipments marked 'Delivered' must record delivered_date timestamp</td>
+                <td><span class="team-tag">Supply Chain & Operations Analytics</span></td>
+                <td class="remediation-cell">Extract delivery timestamp from carrier tracking raw payload; patch webhook parser to handle carrier-specific status date schemas.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-10</code></td>
+                <td><strong>fct_shipments</strong></td>
+                <td><code></code></td>
+                <td><span class="dim-pill dim-consistency">Consistency</span></td>
+                <td><span class="badge" style="background:#f9731622; color:#f97316; border: 1px solid #f9731666;">HIGH</span></td>
+                <td><strong>38</strong> <span class="text-muted">(0.79%)</span></td>
+                <td>Temporal causality: shipped_date must occur chronologically after order_date</td>
+                <td><span class="team-tag">Supply Chain & Operations Analytics</span></td>
+                <td class="remediation-cell">Normalize all timestamp ingestions to UTC at API gateway; flag and recalculate shipment lead times with timezone offsets.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-04</code></td>
+                <td><strong>fct_inventory</strong></td>
+                <td><code>reorder_point</code></td>
+                <td><span class="dim-pill dim-completeness">Completeness</span></td>
+                <td><span class="badge" style="background:#3b82f622; color:#3b82f6; border: 1px solid #3b82f666;">MEDIUM</span></td>
+                <td><strong>112</strong> <span class="text-muted">(7.0%)</span></td>
+                <td>Inventory stock records must define an active reorder_point threshold</td>
+                <td><span class="team-tag">Supply Chain & Operations Analytics</span></td>
+                <td class="remediation-cell">Default reorder point to category median safety stock formula (2 * lead_time_days * avg_daily_sales) upon SKU activation.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-20</code></td>
+                <td><strong>fct_inventory</strong></td>
+                <td><code>warehouse_id</code></td>
+                <td><span class="dim-pill dim-distribution">Distribution</span></td>
+                <td><span class="badge" style="background:#64748b22; color:#64748b; border: 1px solid #64748b66;">LOW</span></td>
+                <td><strong>1,600</strong> <span class="text-muted">(100.0%)</span></td>
+                <td>Warehouse location must not be a zero-variance degenerate constant ('WH-DEFAULT')</td>
+                <td><span class="team-tag">Supply Chain & Operations Analytics</span></td>
+                <td class="remediation-cell">Reprocess inventory snapshots using location cross-reference table; re-enable multi-facility inventory allocation.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-15</code></td>
+                <td><strong>fct_customer_interactions</strong></td>
+                <td><code>interaction_date</code></td>
+                <td><span class="dim-pill dim-accuracy">Accuracy</span></td>
+                <td><span class="badge" style="background:#3b82f622; color:#3b82f6; border: 1px solid #3b82f666;">MEDIUM</span></td>
+                <td><strong>32</strong> <span class="text-muted">(1.0%)</span></td>
+                <td>Interaction timestamps must not be set to future dates</td>
+                <td><span class="team-tag">Marketing & Growth Analytics</span></td>
+                <td class="remediation-cell">Overwrite client-provided timestamp with server-side database CURRENT_TIMESTAMP upon ticket creation.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-18</code></td>
+                <td><strong>fct_customer_interactions</strong></td>
+                <td><code>rating_score</code></td>
+                <td><span class="dim-pill dim-accuracy">Accuracy</span></td>
+                <td><span class="badge" style="background:#3b82f622; color:#3b82f6; border: 1px solid #3b82f666;">MEDIUM</span></td>
+                <td><strong>36</strong> <span class="text-muted">(1.12%)</span></td>
+                <td>CSAT rating scores must fall strictly within the 1 to 5 scale</td>
+                <td><span class="team-tag">Marketing & Growth Analytics</span></td>
+                <td class="remediation-cell">Rescale 10-point NPS scores to 5-star metric: CEIL(nps_score / 2.0); create distinct columns for NPS vs CSAT.</td>
+            </tr>
+            
+            <tr>
+                <td><code class="issue-id">ISSUE-21</code></td>
+                <td><strong>fct_customer_interactions</strong></td>
+                <td><code>resolution_time_mins</code></td>
+                <td><span class="dim-pill dim-distribution">Distribution</span></td>
+                <td><span class="badge" style="background:#3b82f622; color:#3b82f6; border: 1px solid #3b82f666;">MEDIUM</span></td>
+                <td><strong>18</strong> <span class="text-muted">(0.56%)</span></td>
+                <td>Ticket resolution time must not have idle extreme outliers (> 48 hours / 2880 mins)</td>
+                <td><span class="team-tag">Marketing & Growth Analytics</span></td>
+                <td class="remediation-cell">Deduct paused customer-wait time from total duration; implement automated 72-hour ticket auto-close trigger.</td>
+            </tr>
+            
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 8 PROFILED DATASETS METRICS -->
+    <div class="section-title">Catalog of 8 Profiled Datasets</div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Dataset Name</th>
+                    <th>Primary Key</th>
+                    <th>Row Count</th>
+                    <th>Columns</th>
+                    <th>Memory</th>
+                    <th>Null Cells</th>
+                    <th>Completeness %</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            <tr>
+                <td><strong>dim_customers</strong></td>
+                <td><code>customer_id</code></td>
+                <td>2,500</td>
+                <td>10</td>
+                <td>1.394 MB</td>
+                <td>282</td>
+                <td>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 98.87%; background: #f59e0b;"></div>
+                    </div>
+                    <span style="font-weight: 600; color: #f59e0b;">98.87%</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td><strong>dim_products</strong></td>
+                <td><code>product_id</code></td>
+                <td>800</td>
+                <td>10</td>
+                <td>0.305 MB</td>
+                <td>0</td>
+                <td>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 100.0%; background: #10b981;"></div>
+                    </div>
+                    <span style="font-weight: 600; color: #10b981;">100.0%</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td><strong>fct_orders</strong></td>
+                <td><code>order_id</code></td>
+                <td>5,000</td>
+                <td>11</td>
+                <td>2.103 MB</td>
+                <td>200</td>
+                <td>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 99.64%; background: #10b981;"></div>
+                    </div>
+                    <span style="font-weight: 600; color: #10b981;">99.64%</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td><strong>fct_order_items</strong></td>
+                <td><code>item_id</code></td>
+                <td>12,500</td>
+                <td>8</td>
+                <td>3.197 MB</td>
+                <td>0</td>
+                <td>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 100.0%; background: #10b981;"></div>
+                    </div>
+                    <span style="font-weight: 600; color: #10b981;">100.0%</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td><strong>fct_payments</strong></td>
+                <td><code>payment_id</code></td>
+                <td>5,200</td>
+                <td>9</td>
+                <td>2.136 MB</td>
+                <td>234</td>
+                <td>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 99.5%; background: #10b981;"></div>
+                    </div>
+                    <span style="font-weight: 600; color: #10b981;">99.5%</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td><strong>fct_shipments</strong></td>
+                <td><code>shipment_id</code></td>
+                <td>4,800</td>
+                <td>10</td>
+                <td>2.47 MB</td>
+                <td>1,405</td>
+                <td>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 97.07%; background: #f59e0b;"></div>
+                    </div>
+                    <span style="font-weight: 600; color: #f59e0b;">97.07%</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td><strong>fct_inventory</strong></td>
+                <td><code>inventory_id</code></td>
+                <td>1,600</td>
+                <td>7</td>
+                <td>0.394 MB</td>
+                <td>112</td>
+                <td>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 99.0%; background: #10b981;"></div>
+                    </div>
+                    <span style="font-weight: 600; color: #10b981;">99.0%</span>
+                </td>
+            </tr>
+            
+            <tr>
+                <td><strong>fct_customer_interactions</strong></td>
+                <td><code>interaction_id</code></td>
+                <td>3,200</td>
+                <td>8</td>
+                <td>0.972 MB</td>
+                <td>0</td>
+                <td>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 100.0%; background: #10b981;"></div>
+                    </div>
+                    <span style="font-weight: 600; color: #10b981;">100.0%</span>
+                </td>
+            </tr>
+            
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

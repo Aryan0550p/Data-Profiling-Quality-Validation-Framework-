@@ -1,0 +1,69 @@
+# Great Expectations Project Configuration
+config_version: 3.0
+
+datasources:
+  pandas_datasource:
+    class_name: Datasource
+    execution_engine:
+      class_name: PandasExecutionEngine
+    data_connectors:
+      default_runtime_data_connector:
+        class_name: RuntimeDataConnector
+        batch_identifiers:
+          - default_identifier_name
+      filesystem_data_connector:
+        class_name: ConfiguredAssetFilesystemDataConnector
+        base_directory: ../data/raw
+        assets:
+          dim_customers:
+            pattern: dim_customers.csv
+            reader_method: read_csv
+          dim_products:
+            pattern: dim_products.csv
+            reader_method: read_csv
+          fct_orders:
+            pattern: fct_orders.csv
+            reader_method: read_csv
+          fct_order_items:
+            pattern: fct_order_items.csv
+            reader_method: read_csv
+          fct_payments:
+            pattern: fct_payments.csv
+            reader_method: read_csv
+          fct_shipments:
+            pattern: fct_shipments.csv
+            reader_method: read_csv
+          fct_inventory:
+            pattern: fct_inventory.csv
+            reader_method: read_csv
+          fct_customer_interactions:
+            pattern: fct_customer_interactions.csv
+            reader_method: read_csv
+
+expectations_store_name: expectations_store
+validations_store_name: validations_store
+evaluation_parameter_store_name: evaluation_parameter_store
+
+data_docs_sites:
+  local_site:
+    class_name: SiteBuilder
+    show_how_to_buttons: false
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: uncommitted/data_docs/local_site/
+    site_index_builder:
+      class_name: DefaultSiteIndexBuilder
+
+stores:
+  expectations_store:
+    class_name: ExpectationsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: expectations/
+  validations_store:
+    class_name: ValidationsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: uncommitted/validations/
+  evaluation_parameter_store:
+    class_name: EvaluationParameterStore

@@ -1,0 +1,154 @@
+{
+  "evaluation_parameters": {},
+  "meta": {
+    "expectation_suite_name": "fct_customer_interactions_quality_suite",
+    "run_id": "RUN-20261122T132543Z",
+    "dataset_name": "fct_customer_interactions",
+    "validation_time": "2026-11-22T13:25:44.021418"
+  },
+  "success": false,
+  "statistics": {
+    "evaluated_expectations": 6,
+    "successful_expectations": 3,
+    "unsuccessful_expectations": 3,
+    "success_percent": 50.0
+  },
+  "results": [
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "column": "interaction_id"
+        },
+        "meta": {
+          "dimension": "completeness",
+          "severity": "CRITICAL",
+          "description": "Interaction ID must not be null"
+        }
+      },
+      "result": {
+        "element_count": 3200,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "3200/3200 non-null"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_unique",
+        "kwargs": {
+          "column": "interaction_id"
+        },
+        "meta": {
+          "dimension": "consistency",
+          "severity": "CRITICAL",
+          "description": "Interaction ID must be unique primary key"
+        }
+      },
+      "result": {
+        "element_count": 3200,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "3200 unique of 3200"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_past_or_current",
+        "kwargs": {
+          "column": "interaction_date"
+        },
+        "meta": {
+          "dimension": "accuracy",
+          "severity": "MEDIUM",
+          "issue_id": "ISSUE-15",
+          "impacted_team": "Marketing & Growth Analytics",
+          "description": "Interaction timestamps must not be set to future dates"
+        }
+      },
+      "result": {
+        "element_count": 3200,
+        "unexpected_count": 32,
+        "unexpected_percent": 1.0,
+        "observed_value": "32 future dates"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "column": "rating_score",
+          "min_value": 1,
+          "max_value": 5
+        },
+        "meta": {
+          "dimension": "accuracy",
+          "severity": "MEDIUM",
+          "issue_id": "ISSUE-18",
+          "impacted_team": "Marketing & Growth Analytics",
+          "description": "CSAT rating scores must fall strictly within the 1 to 5 scale"
+        }
+      },
+      "result": {
+        "element_count": 3200,
+        "unexpected_count": 36,
+        "unexpected_percent": 1.12,
+        "observed_value": "36 values outside bounds [1, 5]"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_between",
+        "kwargs": {
+          "column": "resolution_time_mins",
+          "min_value": 0.0,
+          "max_value": 2880.0
+        },
+        "meta": {
+          "dimension": "distribution",
+          "severity": "MEDIUM",
+          "issue_id": "ISSUE-21",
+          "impacted_team": "Marketing & Growth Analytics",
+          "description": "Ticket resolution time must not have idle extreme outliers (> 48 hours / 2880 mins)"
+        }
+      },
+      "result": {
+        "element_count": 3200,
+        "unexpected_count": 18,
+        "unexpected_percent": 0.56,
+        "observed_value": "18 values outside bounds [0.0, 2880.0]"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "column": "channel",
+          "value_set": [
+            "Email",
+            "Chat",
+            "Phone",
+            "Social Media"
+          ]
+        },
+        "meta": {
+          "dimension": "accuracy",
+          "severity": "LOW",
+          "description": "Support channel must match accepted CRM communication avenues"
+        }
+      },
+      "result": {
+        "element_count": 3200,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "0 unexpected values outside allowed set"
+      }
+    }
+  ]
+}

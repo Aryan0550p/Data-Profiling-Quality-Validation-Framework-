@@ -1,0 +1,74 @@
+{
+  "expectation_suite_name": "fct_inventory_quality_suite",
+  "data_asset_type": "Dataset",
+  "meta": {
+    "great_expectations_version": "0.18.12",
+    "dataset_name": "fct_inventory",
+    "target_columns": 7,
+    "description": "Automated Great Expectations suite for fct_inventory"
+  },
+  "expectations": [
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "inventory_id"
+      },
+      "meta": {
+        "dimension": "completeness",
+        "severity": "CRITICAL",
+        "description": "Inventory ID must not be null"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "inventory_id"
+      },
+      "meta": {
+        "dimension": "consistency",
+        "severity": "CRITICAL",
+        "description": "Inventory ID must be unique primary key"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "reorder_point"
+      },
+      "meta": {
+        "dimension": "completeness",
+        "severity": "MEDIUM",
+        "issue_id": "ISSUE-04",
+        "impacted_team": "Supply Chain & Operations Analytics",
+        "description": "Inventory stock records must define an active reorder_point threshold"
+      }
+    },
+    {
+      "expectation_type": "expect_column_unique_value_count_to_be_greater_than",
+      "kwargs": {
+        "column": "warehouse_id",
+        "min_unique": 2
+      },
+      "meta": {
+        "dimension": "distribution",
+        "severity": "LOW",
+        "issue_id": "ISSUE-20",
+        "impacted_team": "Supply Chain & Operations Analytics",
+        "description": "Warehouse location must not be a zero-variance degenerate constant ('WH-DEFAULT')"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "stock_on_hand",
+        "min_value": 0,
+        "max_value": 100000
+      },
+      "meta": {
+        "dimension": "accuracy",
+        "severity": "HIGH",
+        "description": "Stock on hand cannot be negative"
+      }
+    }
+  ]
+}

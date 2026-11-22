@@ -1,0 +1,141 @@
+{
+  "expectation_suite_name": "fct_orders_quality_suite",
+  "data_asset_type": "Dataset",
+  "meta": {
+    "great_expectations_version": "0.18.12",
+    "dataset_name": "fct_orders",
+    "target_columns": 11,
+    "description": "Automated Great Expectations suite for fct_orders"
+  },
+  "expectations": [
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "order_id"
+      },
+      "meta": {
+        "dimension": "completeness",
+        "severity": "CRITICAL",
+        "description": "Order ID must not be null"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "order_id"
+      },
+      "meta": {
+        "dimension": "consistency",
+        "severity": "CRITICAL",
+        "description": "Order ID must be unique primary key"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "customer_id"
+      },
+      "meta": {
+        "dimension": "completeness",
+        "severity": "CRITICAL",
+        "issue_id": "ISSUE-02",
+        "impacted_team": "Marketing & Growth Analytics",
+        "description": "Orders must be associated with a valid customer_id"
+      }
+    },
+    {
+      "expectation_type": "expect_foreign_key_to_exist",
+      "kwargs": {
+        "column": "customer_id",
+        "reference_dataset": "dim_customers",
+        "reference_column": "customer_id"
+      },
+      "meta": {
+        "dimension": "consistency",
+        "severity": "CRITICAL",
+        "description": "Order customer_id must exist in dim_customers master"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "currency",
+        "value_set": [
+          "USD"
+        ]
+      },
+      "meta": {
+        "dimension": "consistency",
+        "severity": "MEDIUM",
+        "issue_id": "ISSUE-09",
+        "impacted_team": "Financial & Revenue Analytics",
+        "description": "Order currency must be standardized to ISO-4217 uppercase 'USD'"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "total_amount",
+        "min_value": 0.01,
+        "max_value": 25000.0
+      },
+      "meta": {
+        "dimension": "distribution",
+        "severity": "CRITICAL",
+        "issue_id": "ISSUE-19",
+        "impacted_team": "Financial & Revenue Analytics",
+        "description": "Order total must be free of extreme synthetic QA test amounts ($9,999,999)"
+      }
+    },
+    {
+      "expectation_type": "expect_column_distribution_anomaly_check",
+      "kwargs": {
+        "column": "discount_amount",
+        "anomaly_value": 0.01,
+        "max_allowed_ratio": 0.02
+      },
+      "meta": {
+        "dimension": "distribution",
+        "severity": "MEDIUM",
+        "issue_id": "ISSUE-23",
+        "impacted_team": "Financial & Revenue Analytics",
+        "description": "Discount amount must not exhibit rounding clusters of $0.01"
+      }
+    },
+    {
+      "expectation_type": "expect_cross_table_status_concordance",
+      "kwargs": {
+        "order_status_column": "order_status",
+        "shipment_dataset": "fct_shipments",
+        "disallowed_order_status": "Cancelled",
+        "conflicting_shipping_status": "Delivered"
+      },
+      "meta": {
+        "dimension": "consistency",
+        "severity": "HIGH",
+        "issue_id": "ISSUE-08",
+        "impacted_team": "Supply Chain & Operations Analytics",
+        "description": "Cancelled orders must not have conflicting Delivered status in shipments"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "order_status",
+        "value_set": [
+          "Delivered",
+          "Shipped",
+          "Processing",
+          "Pending",
+          "Cancelled",
+          "Refunded"
+        ]
+      },
+      "meta": {
+        "dimension": "accuracy",
+        "severity": "HIGH",
+        "description": "Order status must be within the supported lifecycle states"
+      }
+    }
+  ]
+}

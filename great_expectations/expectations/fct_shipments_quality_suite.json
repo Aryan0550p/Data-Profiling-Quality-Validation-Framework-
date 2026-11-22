@@ -1,0 +1,100 @@
+{
+  "expectation_suite_name": "fct_shipments_quality_suite",
+  "data_asset_type": "Dataset",
+  "meta": {
+    "great_expectations_version": "0.18.12",
+    "dataset_name": "fct_shipments",
+    "target_columns": 10,
+    "description": "Automated Great Expectations suite for fct_shipments"
+  },
+  "expectations": [
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "shipment_id"
+      },
+      "meta": {
+        "dimension": "completeness",
+        "severity": "CRITICAL",
+        "description": "Shipment ID must not be null"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "shipment_id"
+      },
+      "meta": {
+        "dimension": "consistency",
+        "severity": "CRITICAL",
+        "description": "Shipment ID must be unique primary key"
+      }
+    },
+    {
+      "expectation_type": "expect_conditional_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "delivered_date",
+        "condition_column": "shipping_status",
+        "condition_values": [
+          "Delivered"
+        ]
+      },
+      "meta": {
+        "dimension": "completeness",
+        "severity": "HIGH",
+        "issue_id": "ISSUE-03",
+        "impacted_team": "Supply Chain & Operations Analytics",
+        "description": "Shipments marked 'Delivered' must record delivered_date timestamp"
+      }
+    },
+    {
+      "expectation_type": "expect_cross_table_temporal_order",
+      "kwargs": {
+        "shipment_date_col": "shipped_date",
+        "order_dataset": "fct_orders",
+        "order_date_col": "order_date"
+      },
+      "meta": {
+        "dimension": "consistency",
+        "severity": "HIGH",
+        "issue_id": "ISSUE-10",
+        "impacted_team": "Supply Chain & Operations Analytics",
+        "description": "Temporal causality: shipped_date must occur chronologically after order_date"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "shipping_status",
+        "value_set": [
+          "Delivered",
+          "In Transit",
+          "Failed Delivery",
+          "Returned"
+        ]
+      },
+      "meta": {
+        "dimension": "accuracy",
+        "severity": "HIGH",
+        "description": "Shipping status must belong to standard carrier milestones"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "carrier",
+        "value_set": [
+          "FedEx",
+          "UPS",
+          "DHL",
+          "USPS"
+        ]
+      },
+      "meta": {
+        "dimension": "accuracy",
+        "severity": "MEDIUM",
+        "description": "Carrier must be an approved logistics provider"
+      }
+    }
+  ]
+}

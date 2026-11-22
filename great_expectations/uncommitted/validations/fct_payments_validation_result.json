@@ -1,0 +1,134 @@
+{
+  "evaluation_parameters": {},
+  "meta": {
+    "expectation_suite_name": "fct_payments_quality_suite",
+    "run_id": "RUN-20261122T132543Z",
+    "dataset_name": "fct_payments",
+    "validation_time": "2026-11-22T13:25:43.972159"
+  },
+  "success": false,
+  "statistics": {
+    "evaluated_expectations": 5,
+    "successful_expectations": 3,
+    "unsuccessful_expectations": 2,
+    "success_percent": 60.0
+  },
+  "results": [
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "column": "payment_id"
+        },
+        "meta": {
+          "dimension": "completeness",
+          "severity": "CRITICAL",
+          "description": "Payment ID must not be null"
+        }
+      },
+      "result": {
+        "element_count": 5200,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "5200/5200 non-null"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_unique",
+        "kwargs": {
+          "column": "payment_id"
+        },
+        "meta": {
+          "dimension": "consistency",
+          "severity": "CRITICAL",
+          "description": "Payment ID must be unique primary key"
+        }
+      },
+      "result": {
+        "element_count": 5200,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "5200 unique of 5200"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_conditional_column_values_to_not_be_null",
+        "kwargs": {
+          "column": "gateway_transaction_id",
+          "condition_column": "payment_status",
+          "condition_values": [
+            "Success"
+          ]
+        },
+        "meta": {
+          "dimension": "completeness",
+          "severity": "CRITICAL",
+          "issue_id": "ISSUE-06",
+          "impacted_team": "Financial & Revenue Analytics",
+          "description": "Settled payments with status 'Success' must have gateway transaction ID"
+        }
+      },
+      "result": {
+        "element_count": 4802,
+        "unexpected_count": 234,
+        "unexpected_percent": 4.87,
+        "observed_value": "234 nulls in 4802 conditioned rows"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_payment_amount_to_match_order_total",
+        "kwargs": {
+          "payment_amount_col": "amount_paid",
+          "order_dataset": "fct_orders",
+          "order_total_col": "total_amount"
+        },
+        "meta": {
+          "dimension": "consistency",
+          "severity": "CRITICAL",
+          "issue_id": "ISSUE-11",
+          "impacted_team": "Financial & Revenue Analytics",
+          "description": "Settled payment amount must reconcile identically with order total"
+        }
+      },
+      "result": {
+        "element_count": 5200,
+        "unexpected_count": 73,
+        "unexpected_percent": 1.52,
+        "observed_value": "73 ledger variances"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "column": "payment_status",
+          "value_set": [
+            "Success",
+            "Pending",
+            "Failed",
+            "Refunded"
+          ]
+        },
+        "meta": {
+          "dimension": "accuracy",
+          "severity": "HIGH",
+          "description": "Payment status must match allowed gateway statuses"
+        }
+      },
+      "result": {
+        "element_count": 5200,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "0 unexpected values outside allowed set"
+      }
+    }
+  ]
+}

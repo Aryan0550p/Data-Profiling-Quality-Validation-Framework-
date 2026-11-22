@@ -1,0 +1,504 @@
+{
+  "metadata": {
+    "generated_at": "20261122T132543Z",
+    "total_datasets": 8,
+    "total_columns": 73,
+    "total_rows": 35600
+  },
+  "kpis": {
+    "DQ_INDEX": {
+      "name": "Overall Data Quality Index",
+      "value": 54.17,
+      "target_sla": 95.0,
+      "status": "CRITICAL",
+      "unit": "%"
+    },
+    "COMPLETENESS_RATE": {
+      "name": "Completeness Rate",
+      "value": 60.0,
+      "target_sla": 98.0,
+      "status": "CRITICAL",
+      "unit": "%"
+    },
+    "CONSISTENCY_RATE": {
+      "name": "Consistency & Referential Integrity Rate",
+      "value": 60.0,
+      "target_sla": 99.0,
+      "status": "CRITICAL",
+      "unit": "%"
+    },
+    "ACCURACY_RATE": {
+      "name": "Accuracy & Validity Rate",
+      "value": 64.71,
+      "target_sla": 98.5,
+      "status": "CRITICAL",
+      "unit": "%"
+    },
+    "DISTRIBUTION_HEALTH": {
+      "name": "Distribution & Statistical Health Score",
+      "value": 0.0,
+      "target_sla": 96.0,
+      "status": "CRITICAL",
+      "unit": "%"
+    },
+    "FRESHNESS_SLA": {
+      "name": "Freshness & Timeliness SLA Compliance Rate",
+      "value": 99.8,
+      "target_sla": 99.5,
+      "status": "PASS",
+      "unit": "%"
+    }
+  },
+  "dimension_scores": {
+    "completeness": {
+      "total": 15,
+      "passed": 9,
+      "score": 60.0
+    },
+    "consistency": {
+      "total": 15,
+      "passed": 9,
+      "score": 60.0
+    },
+    "accuracy": {
+      "total": 17,
+      "passed": 11,
+      "score": 64.71
+    },
+    "distribution": {
+      "total": 5,
+      "passed": 0,
+      "score": 0.0
+    }
+  },
+  "flagged_issues": [
+    {
+      "issue_id": "ISSUE-01",
+      "dataset": "dim_customers",
+      "column": "email",
+      "dimension": "completeness",
+      "severity": "HIGH",
+      "description": "Customer contact email must be populated",
+      "unexpected_count": 122,
+      "unexpected_percent": 4.88,
+      "impacted_team": "Marketing & Growth Analytics",
+      "remediation": "Apply deterministic placeholder email format (guest_<cust_id>@unregistered.internal) and enforce email validation at signup UI."
+    },
+    {
+      "issue_id": "ISSUE-12",
+      "dataset": "dim_customers",
+      "column": "email",
+      "dimension": "consistency",
+      "severity": "MEDIUM",
+      "description": "Customer email addresses must be globally unique across profiles",
+      "unexpected_count": 56,
+      "unexpected_percent": 2.35,
+      "impacted_team": "Marketing & Growth Analytics",
+      "remediation": "Apply LOWER(TRIM(email)) in ETL merge pipeline; merge duplicate customer histories into primary canonical customer UUID."
+    },
+    {
+      "issue_id": "ISSUE-05",
+      "dataset": "dim_customers",
+      "column": "phone",
+      "dimension": "completeness",
+      "severity": "LOW",
+      "description": "VIP and Corporate customers must have telephone numbers",
+      "unexpected_count": 160,
+      "unexpected_percent": 25.76,
+      "impacted_team": "Marketing & Growth Analytics",
+      "remediation": "Trigger automated in-app profile completion prompt for tier upgrade qualification; fall back to billing telephone record."
+    },
+    {
+      "issue_id": "ISSUE-16",
+      "dataset": "dim_customers",
+      "column": "postal_code",
+      "dimension": "accuracy",
+      "severity": "LOW",
+      "description": "US postal codes must conform to standard 5-digit or 9-digit ZIP regex",
+      "unexpected_count": 78,
+      "unexpected_percent": 4.15,
+      "impacted_team": "Marketing & Growth Analytics",
+      "remediation": "Cleanse string with regex extraction r'^(\\d{5})(-\\d{4})?$'; integrate USPS Address Verification API at checkout."
+    },
+    {
+      "issue_id": "ISSUE-17",
+      "dataset": "dim_products",
+      "column": "",
+      "dimension": "accuracy",
+      "severity": "HIGH",
+      "description": "Product unit_price must exceed unit_cost (positive gross margin)",
+      "unexpected_count": 24,
+      "unexpected_percent": 3.0,
+      "impacted_team": "Financial & Revenue Analytics",
+      "remediation": "Swap inverted cost and price attributes; notify merchant pricing team and halt automated clearance markdown rules."
+    },
+    {
+      "issue_id": "ISSUE-22",
+      "dataset": "dim_products",
+      "column": "weight_kg",
+      "dimension": "distribution",
+      "severity": "HIGH",
+      "description": "Product weight must not contain extreme anomalies (> 50kg for retail)",
+      "unexpected_count": 15,
+      "unexpected_percent": 1.88,
+      "impacted_team": "Supply Chain & Operations Analytics",
+      "remediation": "Apply conditional conversion (weight_kg = weight_kg / 1000) when category is 'Accessories' and weight > 50kg; update freight rate quotes."
+    },
+    {
+      "issue_id": "ISSUE-02",
+      "dataset": "fct_orders",
+      "column": "customer_id",
+      "dimension": "completeness",
+      "severity": "CRITICAL",
+      "description": "Orders must be associated with a valid customer_id",
+      "unexpected_count": 200,
+      "unexpected_percent": 4.0,
+      "impacted_team": "Marketing & Growth Analytics",
+      "remediation": "Backfill customer_id from payment gateway payer email lookup; reject order creation events lacking customer UUID in Kafka topic."
+    },
+    {
+      "issue_id": "ISSUE-09",
+      "dataset": "fct_orders",
+      "column": "currency",
+      "dimension": "consistency",
+      "severity": "MEDIUM",
+      "description": "Order currency must be standardized to ISO-4217 uppercase 'USD'",
+      "unexpected_count": 185,
+      "unexpected_percent": 3.7,
+      "impacted_team": "Financial & Revenue Analytics",
+      "remediation": "Standardize ingestion to ISO-4217 3-letter currency codes via uppercase string transformation and strict enum validation."
+    },
+    {
+      "issue_id": "ISSUE-19",
+      "dataset": "fct_orders",
+      "column": "total_amount",
+      "dimension": "distribution",
+      "severity": "CRITICAL",
+      "description": "Order total must be free of extreme synthetic QA test amounts ($9,999,999)",
+      "unexpected_count": 3,
+      "unexpected_percent": 0.06,
+      "impacted_team": "Financial & Revenue Analytics",
+      "remediation": "Exclude synthetic test account orders with flag is_test = TRUE; tag and isolate transactions exceeding 4 sigma from executive reporting."
+    },
+    {
+      "issue_id": "ISSUE-23",
+      "dataset": "fct_orders",
+      "column": "discount_amount",
+      "dimension": "distribution",
+      "severity": "MEDIUM",
+      "description": "Discount amount must not exhibit rounding clusters of $0.01",
+      "unexpected_count": 480,
+      "unexpected_percent": 9.6,
+      "impacted_team": "Financial & Revenue Analytics",
+      "remediation": "Absorb rounding fractions into payment processor fee account; eliminate spurious $0.01 promotional records."
+    },
+    {
+      "issue_id": "ISSUE-08",
+      "dataset": "fct_orders",
+      "column": "",
+      "dimension": "consistency",
+      "severity": "HIGH",
+      "description": "Cancelled orders must not have conflicting Delivered status in shipments",
+      "unexpected_count": 244,
+      "unexpected_percent": 5.08,
+      "impacted_team": "Supply Chain & Operations Analytics",
+      "remediation": "Reconcile order state to 'Return_Pending'; auto-generate prepaid return label and trigger customer returns notification."
+    },
+    {
+      "issue_id": "ISSUE-07",
+      "dataset": "fct_order_items",
+      "column": "product_id",
+      "dimension": "consistency",
+      "severity": "CRITICAL",
+      "description": "Order items product_id must exist in active product catalog master",
+      "unexpected_count": 35,
+      "unexpected_percent": 0.28,
+      "impacted_team": "Financial & Revenue Analytics",
+      "remediation": "Implement foreign key constraint with RESTRICT ON DELETE; restore soft-deleted product records with 'Archived' status."
+    },
+    {
+      "issue_id": "ISSUE-13",
+      "dataset": "fct_order_items",
+      "column": "quantity",
+      "dimension": "accuracy",
+      "severity": "CRITICAL",
+      "description": "Item quantity must be strictly positive (no negative returns in sales ledger)",
+      "unexpected_count": 45,
+      "unexpected_percent": 0.36,
+      "impacted_team": "Financial & Revenue Analytics",
+      "remediation": "Route negative adjustments to dedicated fct_returns table; enforce CHECK (quantity > 0) constraint in sales transaction schema."
+    },
+    {
+      "issue_id": "ISSUE-14",
+      "dataset": "fct_order_items",
+      "column": "discount_rate",
+      "dimension": "accuracy",
+      "severity": "HIGH",
+      "description": "Discount rate must be bounded between 0% and 100% (0.0 to 1.0)",
+      "unexpected_count": 25,
+      "unexpected_percent": 0.2,
+      "impacted_team": "Financial & Revenue Analytics",
+      "remediation": "Cap discount rate at 1.0 (or max permissible promotional threshold 0.70); recalculate line total item price."
+    },
+    {
+      "issue_id": "ISSUE-06",
+      "dataset": "fct_payments",
+      "column": "gateway_transaction_id",
+      "dimension": "completeness",
+      "severity": "CRITICAL",
+      "description": "Settled payments with status 'Success' must have gateway transaction ID",
+      "unexpected_count": 234,
+      "unexpected_percent": 4.87,
+      "impacted_team": "Financial & Revenue Analytics",
+      "remediation": "Require accounting clearing reference number for manual B2B transactions; enforce non-null constraint at payment service layer."
+    },
+    {
+      "issue_id": "ISSUE-11",
+      "dataset": "fct_payments",
+      "column": "",
+      "dimension": "consistency",
+      "severity": "CRITICAL",
+      "description": "Settled payment amount must reconcile identically with order total",
+      "unexpected_count": 73,
+      "unexpected_percent": 1.52,
+      "impacted_team": "Financial & Revenue Analytics",
+      "remediation": "Execute automated differential ledger refund or invoice adjustment; implement two-phase commit on cart checkout settlement."
+    },
+    {
+      "issue_id": "ISSUE-03",
+      "dataset": "fct_shipments",
+      "column": "delivered_date",
+      "dimension": "completeness",
+      "severity": "HIGH",
+      "description": "Shipments marked 'Delivered' must record delivered_date timestamp",
+      "unexpected_count": 210,
+      "unexpected_percent": 5.83,
+      "impacted_team": "Supply Chain & Operations Analytics",
+      "remediation": "Extract delivery timestamp from carrier tracking raw payload; patch webhook parser to handle carrier-specific status date schemas."
+    },
+    {
+      "issue_id": "ISSUE-10",
+      "dataset": "fct_shipments",
+      "column": "",
+      "dimension": "consistency",
+      "severity": "HIGH",
+      "description": "Temporal causality: shipped_date must occur chronologically after order_date",
+      "unexpected_count": 38,
+      "unexpected_percent": 0.79,
+      "impacted_team": "Supply Chain & Operations Analytics",
+      "remediation": "Normalize all timestamp ingestions to UTC at API gateway; flag and recalculate shipment lead times with timezone offsets."
+    },
+    {
+      "issue_id": "ISSUE-04",
+      "dataset": "fct_inventory",
+      "column": "reorder_point",
+      "dimension": "completeness",
+      "severity": "MEDIUM",
+      "description": "Inventory stock records must define an active reorder_point threshold",
+      "unexpected_count": 112,
+      "unexpected_percent": 7.0,
+      "impacted_team": "Supply Chain & Operations Analytics",
+      "remediation": "Default reorder point to category median safety stock formula (2 * lead_time_days * avg_daily_sales) upon SKU activation."
+    },
+    {
+      "issue_id": "ISSUE-20",
+      "dataset": "fct_inventory",
+      "column": "warehouse_id",
+      "dimension": "distribution",
+      "severity": "LOW",
+      "description": "Warehouse location must not be a zero-variance degenerate constant ('WH-DEFAULT')",
+      "unexpected_count": 1600,
+      "unexpected_percent": 100.0,
+      "impacted_team": "Supply Chain & Operations Analytics",
+      "remediation": "Reprocess inventory snapshots using location cross-reference table; re-enable multi-facility inventory allocation."
+    },
+    {
+      "issue_id": "ISSUE-15",
+      "dataset": "fct_customer_interactions",
+      "column": "interaction_date",
+      "dimension": "accuracy",
+      "severity": "MEDIUM",
+      "description": "Interaction timestamps must not be set to future dates",
+      "unexpected_count": 32,
+      "unexpected_percent": 1.0,
+      "impacted_team": "Marketing & Growth Analytics",
+      "remediation": "Overwrite client-provided timestamp with server-side database CURRENT_TIMESTAMP upon ticket creation."
+    },
+    {
+      "issue_id": "ISSUE-18",
+      "dataset": "fct_customer_interactions",
+      "column": "rating_score",
+      "dimension": "accuracy",
+      "severity": "MEDIUM",
+      "description": "CSAT rating scores must fall strictly within the 1 to 5 scale",
+      "unexpected_count": 36,
+      "unexpected_percent": 1.12,
+      "impacted_team": "Marketing & Growth Analytics",
+      "remediation": "Rescale 10-point NPS scores to 5-star metric: CEIL(nps_score / 2.0); create distinct columns for NPS vs CSAT."
+    },
+    {
+      "issue_id": "ISSUE-21",
+      "dataset": "fct_customer_interactions",
+      "column": "resolution_time_mins",
+      "dimension": "distribution",
+      "severity": "MEDIUM",
+      "description": "Ticket resolution time must not have idle extreme outliers (> 48 hours / 2880 mins)",
+      "unexpected_count": 18,
+      "unexpected_percent": 0.56,
+      "impacted_team": "Marketing & Growth Analytics",
+      "remediation": "Deduct paused customer-wait time from total duration; implement automated 72-hour ticket auto-close trigger."
+    }
+  ],
+  "table_summaries": {
+    "dim_customers": {
+      "dataset_name": "dim_customers",
+      "description": "Master customer profile and demographic dimensions",
+      "primary_key": "customer_id",
+      "row_count": 2500,
+      "column_count": 10,
+      "memory_usage_mb": 1.394,
+      "total_cells": 25000,
+      "null_cells": 282,
+      "completeness_rate_pct": 98.87,
+      "duplicate_rows": 0
+    },
+    "dim_products": {
+      "dataset_name": "dim_products",
+      "description": "Product catalog and pricing master data",
+      "primary_key": "product_id",
+      "row_count": 800,
+      "column_count": 10,
+      "memory_usage_mb": 0.305,
+      "total_cells": 8000,
+      "null_cells": 0,
+      "completeness_rate_pct": 100.0,
+      "duplicate_rows": 0
+    },
+    "fct_orders": {
+      "dataset_name": "fct_orders",
+      "description": "Header-level order transactions and financial summary",
+      "primary_key": "order_id",
+      "row_count": 5000,
+      "column_count": 11,
+      "memory_usage_mb": 2.103,
+      "total_cells": 55000,
+      "null_cells": 200,
+      "completeness_rate_pct": 99.64,
+      "duplicate_rows": 0
+    },
+    "fct_order_items": {
+      "dataset_name": "fct_order_items",
+      "description": "Line-item level order fulfillment and product details",
+      "primary_key": "item_id",
+      "row_count": 12500,
+      "column_count": 8,
+      "memory_usage_mb": 3.197,
+      "total_cells": 100000,
+      "null_cells": 0,
+      "completeness_rate_pct": 100.0,
+      "duplicate_rows": 0
+    },
+    "fct_payments": {
+      "dataset_name": "fct_payments",
+      "description": "Financial payment transaction logs and gateway reconciliations",
+      "primary_key": "payment_id",
+      "row_count": 5200,
+      "column_count": 9,
+      "memory_usage_mb": 2.136,
+      "total_cells": 46800,
+      "null_cells": 234,
+      "completeness_rate_pct": 99.5,
+      "duplicate_rows": 0
+    },
+    "fct_shipments": {
+      "dataset_name": "fct_shipments",
+      "description": "Logistics and shipping tracking lifecycle events",
+      "primary_key": "shipment_id",
+      "row_count": 4800,
+      "column_count": 10,
+      "memory_usage_mb": 2.47,
+      "total_cells": 48000,
+      "null_cells": 1405,
+      "completeness_rate_pct": 97.07,
+      "duplicate_rows": 0
+    },
+    "fct_inventory": {
+      "dataset_name": "fct_inventory",
+      "description": "Warehouse inventory snapshot levels and restock thresholds",
+      "primary_key": "inventory_id",
+      "row_count": 1600,
+      "column_count": 7,
+      "memory_usage_mb": 0.394,
+      "total_cells": 11200,
+      "null_cells": 112,
+      "completeness_rate_pct": 99.0,
+      "duplicate_rows": 0
+    },
+    "fct_customer_interactions": {
+      "dataset_name": "fct_customer_interactions",
+      "description": "Customer support interactions, tickets, and CSAT scores",
+      "primary_key": "interaction_id",
+      "row_count": 3200,
+      "column_count": 8,
+      "memory_usage_mb": 0.972,
+      "total_cells": 25600,
+      "null_cells": 0,
+      "completeness_rate_pct": 100.0,
+      "duplicate_rows": 0
+    }
+  },
+  "global_metrics": {
+    "total_rows": 35600,
+    "total_cells": 319600,
+    "total_null_cells": 2233,
+    "total_columns": 73,
+    "overall_completeness_rate": 99.3,
+    "zero_variance_columns": [
+      "fct_payments.currency",
+      "fct_shipments.destination_country",
+      "fct_inventory.warehouse_id"
+    ],
+    "extreme_outlier_columns": [
+      {
+        "dataset": "dim_products",
+        "column": "unit_cost",
+        "outlier_count": 11
+      },
+      {
+        "dataset": "dim_products",
+        "column": "weight_kg",
+        "outlier_count": 15
+      },
+      {
+        "dataset": "fct_orders",
+        "column": "subtotal_amount",
+        "outlier_count": 3
+      },
+      {
+        "dataset": "fct_orders",
+        "column": "discount_amount",
+        "outlier_count": 34
+      },
+      {
+        "dataset": "fct_orders",
+        "column": "total_amount",
+        "outlier_count": 3
+      },
+      {
+        "dataset": "fct_order_items",
+        "column": "quantity",
+        "outlier_count": 15
+      },
+      {
+        "dataset": "fct_order_items",
+        "column": "discount_rate",
+        "outlier_count": 25
+      },
+      {
+        "dataset": "fct_customer_interactions",
+        "column": "resolution_time_mins",
+        "outlier_count": 40
+      }
+    ]
+  }
+}

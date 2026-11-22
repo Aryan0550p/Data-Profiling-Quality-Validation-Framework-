@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power BI Quality Dashboard Simulation</title>
+    <style>
+        :root {
+            --pbi-bg: #f3f4f6;
+            --pbi-card: #ffffff;
+            --pbi-header: #1e293b;
+            --pbi-border: #e2e8f0;
+            --pbi-primary: #0284c7;
+            --pbi-text: #1e293b;
+            --pbi-muted: #64748b;
+            --pbi-yellow: #f59e0b;
+            --pbi-green: #10b981;
+            --pbi-red: #ef4444;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: var(--pbi-bg); color: var(--pbi-text); padding: 1.5rem; }
+        .pbi-frame {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--pbi-border);
+            overflow: hidden;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .pbi-topbar {
+            background: #1e293b;
+            color: #ffffff;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .pbi-topbar h2 { font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+        .pbi-topbar .live-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .pbi-content { padding: 1.5rem; }
+        
+        /* 6 KPI Cards */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .kpi-box {
+            background: #ffffff;
+            border: 1px solid var(--pbi-border);
+            border-radius: 6px;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .kpi-box.critical { border-top: 4px solid var(--pbi-red); }
+        .kpi-box.warning { border-top: 4px solid var(--pbi-yellow); }
+        .kpi-box.pass { border-top: 4px solid var(--pbi-green); }
+        .kpi-label { font-size: 0.75rem; color: var(--pbi-muted); font-weight: 600; text-transform: uppercase; }
+        .kpi-val { font-size: 1.75rem; font-weight: 700; margin: 0.25rem 0; }
+        .kpi-target { font-size: 0.75rem; color: var(--pbi-muted); }
+
+        /* Main Visual Grid */
+        .visual-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .panel {
+            background: #ffffff;
+            border: 1px solid var(--pbi-border);
+            border-radius: 6px;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .panel-header {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--pbi-header);
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Dimension Gauges */
+        .dim-gauge { margin-bottom: 1rem; }
+        .dim-gauge-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .dim-bar-track { height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; }
+        .dim-bar-fill { height: 100%; border-radius: 5px; }
+
+        /* Slicers / Filters */
+        .slicer-bar {
+            background: #f8fafc;
+            border: 1px solid var(--pbi-border);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        .slicer-btn {
+            background: #ffffff;
+            border: 1px solid var(--pbi-border);
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--pbi-text);
+        }
+        .slicer-btn.active {
+            background: var(--pbi-primary);
+            color: #ffffff;
+            border-color: var(--pbi-primary);
+        }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th { background: #f8fafc; text-align: left; padding: 0.75rem; border-bottom: 2px solid var(--pbi-border); font-size: 0.75rem; text-transform: uppercase; color: var(--pbi-muted); }
+        td { padding: 0.75rem; border-bottom: 1px solid var(--pbi-border); vertical-align: middle; }
+        tr:hover td { background: #f8fafc; }
+        .badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+        .badge-critical { background: #fee2e2; color: #dc2626; }
+        .badge-high { background: #ffedd5; color: #ea580c; }
+        .badge-medium { background: #dbeafe; color: #2563eb; }
+        .badge-low { background: #f1f5f9; color: #64748b; }
+    </style>
+</head>
+<body>
+
+    <div class="pbi-frame">
+        <!-- Top Banner -->
+        <div class="pbi-topbar">
+            <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm2 14h2v-6H6v6zm4 0h2V7h-2v10zm4 0h2v-4h-2v4zm4 0h2v-8h-2v8z"/></svg>
+                Enterprise Data Quality & Profiling Dashboard | Power BI Simulation
+            </h2>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span style="font-size: 0.8rem; color: #cbd5e1;">Target SLA: 95.0% | Frequency: Scheduled Post-ETL</span>
+                <span class="live-badge">RUNNING</span>
+            </div>
+        </div>
+
+        <div class="pbi-content">
+            <!-- 6 KPI CARDS -->
+            <div class="kpi-row">
+                <div class="kpi-box critical">
+                    <div class="kpi-label">Overall DQ Index</div>
+                    <div class="kpi-val" style="color: var(--pbi-red);">54.17%</div>
+                    <div class="kpi-target">Target SLA: <strong>95.0%</strong></div>
+                </div>
+                <div class="kpi-box critical">
+                    <div class="kpi-label">Completeness Rate</div>
+                    <div class="kpi-val" style="color: var(--pbi-red);">60.0%</div>
+                    <div class="kpi-target">Target SLA: <strong>98.0%</strong></div>
+                </div>
+                <div class="kpi-box critical">
+                    <div class="kpi-label">Consistency Rate</div>
+                    <div class="kpi-val" style="color: var(--pbi-red);">60.0%</div>
+                    <div class="kpi-target">Target SLA: <strong>99.0%</strong></div>
+                </div>
+                <div class="kpi-box critical">
+                    <div class="kpi-label">Accuracy Rate</div>
+                    <div class="kpi-val" style="color: var(--pbi-red);">64.71%</div>
+                    <div class="kpi-target">Target SLA: <strong>98.5%</strong></div>
+                </div>
+                <div class="kpi-box critical">
+                    <div class="kpi-label">Distribution Health</div>
+                    <div class="kpi-val" style="color: var(--pbi-red);">0.0%</div>
+                    <div class="kpi-target">Target SLA: <strong>96.0%</strong></div>
+                </div>
+                <div class="kpi-box pass">
+                    <div class="kpi-label">Freshness SLA</div>
+                    <div class="kpi-val" style="color: var(--pbi-green);">99.8%</div>
+                    <div class="kpi-target">Target SLA: <strong>99.5%</strong></div>
+                </div>
+            </div>
+
+            <!-- VISUAL SECTION -->
+            <div class="visual-grid">
+                <!-- Left: Dimension Breakdown -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <span>Quality Dimensions vs SLA Benchmark</span>
+                        <span style="font-size: 0.8rem; color: var(--pbi-muted);">4 Core Dimensions</span>
+                    </div>
+
+                    <div class="dim-gauge">
+                        <div class="dim-gauge-header">
+                            <span>Completeness (Rules: 6/10)</span>
+                            <span style="color: var(--pbi-yellow);">60.0% (SLA: 98%)</span>
+                        </div>
+                        <div class="dim-bar-track"><div class="dim-bar-fill" style="width: 60%; background: #0284c7;"></div></div>
+                    </div>
+
+                    <div class="dim-gauge">
+                        <div class="dim-gauge-header">
+                            <span>Consistency & Referential Integrity (Rules: 6/10)</span>
+                            <span style="color: var(--pbi-yellow);">60.0% (SLA: 99%)</span>
+                        </div>
+                        <div class="dim-bar-track"><div class="dim-bar-fill" style="width: 60%; background: #8b5cf6;"></div></div>
+                    </div>
+
+                    <div class="dim-gauge">
+                        <div class="dim-gauge-header">
+                            <span>Accuracy & Domain Validity (Rules: 11/17)</span>
+                            <span style="color: var(--pbi-yellow);">64.7% (SLA: 98.5%)</span>
+                        </div>
+                        <div class="dim-bar-track"><div class="dim-bar-fill" style="width: 64.7%; background: #f59e0b;"></div></div>
+                    </div>
+
+                    <div class="dim-gauge">
+                        <div class="dim-gauge-header">
+                            <span>Distribution & Outlier Health (Rules: 0/5)</span>
+                            <span style="color: var(--pbi-red);">0.0% (SLA: 96%)</span>
+                        </div>
+                        <div class="dim-bar-track"><div class="dim-bar-fill" style="width: 5%; background: #ef4444;"></div></div>
+                    </div>
+                </div>
+
+                <!-- Right: Severity & Team Distribution -->
+                <div class="panel">
+                    <div class="panel-header">
+                        <span>Issues by Downstream Team</span>
+                    </div>
+                    <div style="font-size: 0.85rem; line-height: 2;">
+                        <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #e2e8f0; padding: 0.4rem 0;">
+                            <span>Financial & Revenue Analytics</span>
+                            <strong style="color: #ef4444;">9 Issues (39.1%)</strong>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #e2e8f0; padding: 0.4rem 0;">
+                            <span>Marketing & Growth Analytics</span>
+                            <strong style="color: #f59e0b;">8 Issues (34.8%)</strong>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding: 0.4rem 0;">
+                            <span>Supply Chain & Operations</span>
+                            <strong style="color: #0284c7;">6 Issues (26.1%)</strong>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1.25rem; padding: 0.75rem; background: #f8fafc; border-radius: 6px; font-size: 0.8rem; color: var(--pbi-muted);">
+                        <strong>Severities:</strong> 6 Critical, 6 High, 7 Medium, 4 Low issues flagged.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slicers -->
+            <div class="slicer-bar">
+                <span><strong>Filter by Team:</strong></span>
+                <button class="slicer-btn active" onclick="filterTable('ALL')">All Teams (23)</button>
+                <button class="slicer-btn" onclick="filterTable('Marketing')">Marketing Analytics (8)</button>
+                <button class="slicer-btn" onclick="filterTable('Supply Chain')">Supply Chain (6)</button>
+                <button class="slicer-btn" onclick="filterTable('Finance')">Financial Analytics (9)</button>
+            </div>
+
+            <!-- Issues Detail Table -->
+            <div class="panel" style="padding: 0; overflow: hidden;">
+                <table id="issues-table">
+                    <thead>
+                        <tr>
+                            <th>Issue ID</th>
+                            <th>Dataset</th>
+                            <th>Column</th>
+                            <th>Dimension</th>
+                            <th>Severity</th>
+                            <th>Violations</th>
+                            <th>Impacted Team</th>
+                            <th>Root Cause & Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-team="Marketing">
+                            <td><code>ISSUE-01</code></td>
+                            <td><strong>dim_customers</strong></td>
+                            <td>email</td>
+                            <td>Completeness</td>
+                            <td><span class="badge badge-high">HIGH</span></td>
+                            <td>125 (5.0%)</td>
+                            <td>Marketing & Growth</td>
+                            <td>Guest checkout migration dropped email. <em>Remedy: Generate guest email format.</em></td>
+                        </tr>
+                        <tr data-team="Marketing">
+                            <td><code>ISSUE-02</code></td>
+                            <td><strong>fct_orders</strong></td>
+                            <td>customer_id</td>
+                            <td>Completeness</td>
+                            <td><span class="badge badge-critical">CRITICAL</span></td>
+                            <td>200 (4.0%)</td>
+                            <td>Marketing & Growth</td>
+                            <td>Async ingestion dropped customer token. <em>Remedy: Backfill from payment session.</em></td>
+                        </tr>
+                        <tr data-team="Supply Chain">
+                            <td><code>ISSUE-03</code></td>
+                            <td><strong>fct_shipments</strong></td>
+                            <td>delivered_date</td>
+                            <td>Completeness</td>
+                            <td><span class="badge badge-high">HIGH</span></td>
+                            <td>210 (6.2%)</td>
+                            <td>Supply Chain & Ops</td>
+                            <td>Carrier webhook dropped ISO timestamp. <em>Remedy: Patch webhook payload parser.</em></td>
+                        </tr>
+                        <tr data-team="Supply Chain">
+                            <td><code>ISSUE-04</code></td>
+                            <td><strong>fct_inventory</strong></td>
+                            <td>reorder_point</td>
+                            <td>Completeness</td>
+                            <td><span class="badge badge-medium">MEDIUM</span></td>
+                            <td>112 (7.0%)</td>
+                            <td>Supply Chain & Ops</td>
+                            <td>SKU onboarding form missing constraint. <em>Remedy: Default to category median safety stock.</em></td>
+                        </tr>
+                        <tr data-team="Marketing">
+                            <td><code>ISSUE-05</code></td>
+                            <td><strong>dim_customers</strong></td>
+                            <td>phone</td>
+                            <td>Completeness</td>
+                            <td><span class="badge badge-low">LOW</span></td>
+                            <td>160 (8.0%)</td>
+                            <td>Marketing & Growth</td>
+                            <td>OAuth signup bypassed phone collection. <em>Remedy: Prompt in-app profile completion.</em></td>
+                        </tr>
+                        <tr data-team="Finance">
+                            <td><code>ISSUE-06</code></td>
+                            <td><strong>fct_payments</strong></td>
+                            <td>gateway_transaction_id</td>
+                            <td>Completeness</td>
+                            <td><span class="badge badge-critical">CRITICAL</span></td>
+                            <td>234 (4.5%)</td>
+                            <td>Financial & Revenue</td>
+                            <td>Offline wire transfers unlinked. <em>Remedy: Require accounting clearing reference.</em></td>
+                        </tr>
+                        <tr data-team="Finance">
+                            <td><code>ISSUE-07</code></td>
+                            <td><strong>fct_order_items</strong></td>
+                            <td>product_id</td>
+                            <td>Consistency</td>
+                            <td><span class="badge badge-critical">CRITICAL</span></td>
+                            <td>35 (0.3%)</td>
+                            <td>Financial & Revenue</td>
+                            <td>Hard deletion of discontinued items. <em>Remedy: Enforce RESTRICT ON DELETE; soft delete.</em></td>
+                        </tr>
+                        <tr data-team="Supply Chain">
+                            <td><code>ISSUE-08</code></td>
+                            <td><strong>fct_orders</strong></td>
+                            <td>order_status</td>
+                            <td>Consistency</td>
+                            <td><span class="badge badge-high">HIGH</span></td>
+                            <td>42 (0.8%)</td>
+                            <td>Supply Chain & Ops</td>
+                            <td>Order Cancelled while Shipment Delivered. <em>Remedy: Reconcile state to Return_Pending.</em></td>
+                        </tr>
+                        <tr data-team="Finance">
+                            <td><code>ISSUE-09</code></td>
+                            <td><strong>fct_orders</strong></td>
+                            <td>currency</td>
+                            <td>Consistency</td>
+                            <td><span class="badge badge-medium">MEDIUM</span></td>
+                            <td>185 (3.7%)</td>
+                            <td>Financial & Revenue</td>
+                            <td>Mixed currency strings ('usd', 'US_DOLLAR'). <em>Remedy: Transform to uppercase ISO-4217.</em></td>
+                        </tr>
+                        <tr data-team="Supply Chain">
+                            <td><code>ISSUE-10</code></td>
+                            <td><strong>fct_shipments</strong></td>
+                            <td>shipped_date</td>
+                            <td>Consistency</td>
+                            <td><span class="badge badge-high">HIGH</span></td>
+                            <td>38 (0.8%)</td>
+                            <td>Supply Chain & Ops</td>
+                            <td>Shipped date earlier than order date. <em>Remedy: Standardize UTC timezone across nodes.</em></td>
+                        </tr>
+                        <tr data-team="Finance">
+                            <td><code>ISSUE-11</code></td>
+                            <td><strong>fct_payments</strong></td>
+                            <td>amount_paid</td>
+                            <td>Consistency</td>
+                            <td><span class="badge badge-critical">CRITICAL</span></td>
+                            <td>65 (1.3%)</td>
+                            <td>Financial & Revenue</td>
+                            <td>Payment amount != Order total amount. <em>Remedy: Implement 2-phase commit on settlement.</em></td>
+                        </tr>
+                        <tr data-team="Marketing">
+                            <td><code>ISSUE-12</code></td>
+                            <td><strong>dim_customers</strong></td>
+                            <td>email</td>
+                            <td>Consistency</td>
+                            <td><span class="badge badge-medium">MEDIUM</span></td>
+                            <td>28 (1.1%)</td>
+                            <td>Marketing & Growth</td>
+                            <td>Case sensitivity duplicate profiles. <em>Remedy: Apply LOWER(TRIM(email)) in CRM merge.</em></td>
+                        </tr>
+                        <tr data-team="Finance">
+                            <td><code>ISSUE-13</code></td>
+                            <td><strong>fct_order_items</strong></td>
+                            <td>quantity</td>
+                            <td>Accuracy</td>
+                            <td><span class="badge badge-critical">CRITICAL</span></td>
+                            <td>45 (0.4%)</td>
+                            <td>Financial & Revenue</td>
+                            <td>Negative item quantities (returns mixed in). <em>Remedy: Route credit adjustments to returns table.</em></td>
+                        </tr>
+                        <tr data-team="Finance">
+                            <td><code>ISSUE-14</code></td>
+                            <td><strong>fct_order_items</strong></td>
+                            <td>discount_rate</td>
+                            <td>Accuracy</td>
+                            <td><span class="badge badge-high">HIGH</span></td>
+                            <td>25 (0.2%)</td>
+                            <td>Financial & Revenue</td>
+                            <td>Discount rate > 100% (1.25 to 2.5). <em>Remedy: Cap promotional stacking at 50%.</em></td>
+                        </tr>
+                        <tr data-team="Marketing">
+                            <td><code>ISSUE-15</code></td>
+                            <td><strong>fct_customer_interactions</strong></td>
+                            <td>interaction_date</td>
+                            <td>Accuracy</td>
+                            <td><span class="badge badge-medium">MEDIUM</span></td>
+                            <td>32 (1.0%)</td>
+                            <td>Marketing & Growth</td>
+                            <td>Future client timestamp drift. <em>Remedy: Overwrite with database CURRENT_TIMESTAMP.</em></td>
+                        </tr>
+                        <tr data-team="Marketing">
+                            <td><code>ISSUE-16</code></td>
+                            <td><strong>dim_customers</strong></td>
+                            <td>postal_code</td>
+                            <td>Accuracy</td>
+                            <td><span class="badge badge-low">LOW</span></td>
+                            <td>78 (3.1%)</td>
+                            <td>Marketing & Growth</td>
+                            <td>Malformed US postal codes. <em>Remedy: Regex validation and USPS API lookup.</em></td>
+                        </tr>
+                        <tr data-team="Finance">
+                            <td><code>ISSUE-17</code></td>
+                            <td><strong>dim_products</strong></td>
+                            <td>unit_cost</td>
+                            <td>Accuracy</td>
+                            <td><span class="badge badge-high">HIGH</span></td>
+                            <td>24 (3.0%)</td>
+                            <td>Financial & Revenue</td>
+                            <td>Unit cost > Unit price (swapped columns). <em>Remedy: Swap procurement cost and MSRP fields.</em></td>
+                        </tr>
+                        <tr data-team="Marketing">
+                            <td><code>ISSUE-18</code></td>
+                            <td><strong>fct_customer_interactions</strong></td>
+                            <td>rating_score</td>
+                            <td>Accuracy</td>
+                            <td><span class="badge badge-medium">MEDIUM</span></td>
+                            <td>36 (1.1%)</td>
+                            <td>Marketing & Growth</td>
+                            <td>NPS 10-point scale mixed into 5-star CSAT. <em>Remedy: Rescale 10-point ratings: CEIL(score/2).</em></td>
+                        </tr>
+                        <tr data-team="Finance">
+                            <td><code>ISSUE-19</code></td>
+                            <td><strong>fct_orders</strong></td>
+                            <td>total_amount</td>
+                            <td>Distribution</td>
+                            <td><span class="badge badge-critical">CRITICAL</span></td>
+                            <td>3 (0.1%)</td>
+                            <td>Financial & Revenue</td>
+                            <td>$9,999,999 QA test orders in production. <em>Remedy: Exclude test accounts; isolate >4 sigma outliers.</em></td>
+                        </tr>
+                        <tr data-team="Supply Chain">
+                            <td><code>ISSUE-20</code></td>
+                            <td><strong>fct_inventory</strong></td>
+                            <td>warehouse_id</td>
+                            <td>Distribution</td>
+                            <td><span class="badge badge-low">LOW</span></td>
+                            <td>1,600 (100%)</td>
+                            <td>Supply Chain & Ops</td>
+                            <td>Constant 'WH-DEFAULT' zero-variance. <em>Remedy: Restore multi-facility location cross-reference.</em></td>
+                        </tr>
+                        <tr data-team="Marketing">
+                            <td><code>ISSUE-21</code></td>
+                            <td><strong>fct_customer_interactions</strong></td>
+                            <td>resolution_time_mins</td>
+                            <td>Distribution</td>
+                            <td><span class="badge badge-medium">MEDIUM</span></td>
+                            <td>18 (0.6%)</td>
+                            <td>Marketing & Growth</td>
+                            <td>30+ day hanging tickets. <em>Remedy: Deduct customer waiting time; add 72h auto-close.</em></td>
+                        </tr>
+                        <tr data-team="Supply Chain">
+                            <td><code>ISSUE-22</code></td>
+                            <td><strong>dim_products</strong></td>
+                            <td>weight_kg</td>
+                            <td>Distribution</td>
+                            <td><span class="badge badge-high">HIGH</span></td>
+                            <td>15 (1.9%)</td>
+                            <td>Supply Chain & Ops</td>
+                            <td>5,000 kg phone accessories (grams error). <em>Remedy: Apply 1/1000 metric conversion factor.</em></td>
+                        </tr>
+                        <tr data-team="Finance">
+                            <td><code>ISSUE-23</code></td>
+                            <td><strong>fct_orders</strong></td>
+                            <td>discount_amount</td>
+                            <td>Distribution</td>
+                            <td><span class="badge badge-medium">MEDIUM</span></td>
+                            <td>480 (9.6%)</td>
+                            <td>Financial & Revenue</td>
+                            <td>$0.01 penny-rounding clustering spike. <em>Remedy: Absorb fractional rounding into payment fees.</em></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function filterTable(team) {
+            const btns = document.querySelectorAll('.slicer-btn');
+            btns.forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const rows = document.querySelectorAll('#issues-table tbody tr');
+            rows.forEach(r => {
+                if (team === 'ALL' || r.getAttribute('data-team').includes(team)) {
+                    r.style.display = '';
+                } else {
+                    r.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

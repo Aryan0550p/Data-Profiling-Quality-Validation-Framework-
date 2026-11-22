@@ -1,0 +1,205 @@
+{
+  "evaluation_parameters": {},
+  "meta": {
+    "expectation_suite_name": "dim_customers_quality_suite",
+    "run_id": "RUN-20261122T132543Z",
+    "dataset_name": "dim_customers",
+    "validation_time": "2026-11-22T13:25:43.890577"
+  },
+  "success": false,
+  "statistics": {
+    "evaluated_expectations": 8,
+    "successful_expectations": 4,
+    "unsuccessful_expectations": 4,
+    "success_percent": 50.0
+  },
+  "results": [
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "column": "customer_id"
+        },
+        "meta": {
+          "dimension": "completeness",
+          "severity": "CRITICAL",
+          "description": "Customer ID must not be null"
+        }
+      },
+      "result": {
+        "element_count": 2500,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "2500/2500 non-null"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_unique",
+        "kwargs": {
+          "column": "customer_id"
+        },
+        "meta": {
+          "dimension": "consistency",
+          "severity": "CRITICAL",
+          "description": "Customer ID must be primary key unique"
+        }
+      },
+      "result": {
+        "element_count": 2500,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "2500 unique of 2500"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_not_be_null",
+        "kwargs": {
+          "column": "email"
+        },
+        "meta": {
+          "dimension": "completeness",
+          "severity": "HIGH",
+          "issue_id": "ISSUE-01",
+          "impacted_team": "Marketing & Growth Analytics",
+          "description": "Customer contact email must be populated"
+        }
+      },
+      "result": {
+        "element_count": 2500,
+        "unexpected_count": 122,
+        "unexpected_percent": 4.88,
+        "observed_value": "2378/2500 non-null"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_unique",
+        "kwargs": {
+          "column": "email"
+        },
+        "meta": {
+          "dimension": "consistency",
+          "severity": "MEDIUM",
+          "issue_id": "ISSUE-12",
+          "impacted_team": "Marketing & Growth Analytics",
+          "description": "Customer email addresses must be globally unique across profiles"
+        }
+      },
+      "result": {
+        "element_count": 2500,
+        "unexpected_count": 56,
+        "unexpected_percent": 2.35,
+        "observed_value": "2350 unique of 2378"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_conditional_column_values_to_not_be_null",
+        "kwargs": {
+          "column": "phone",
+          "condition_column": "customer_segment",
+          "condition_values": [
+            "VIP",
+            "Corporate"
+          ]
+        },
+        "meta": {
+          "dimension": "completeness",
+          "severity": "LOW",
+          "issue_id": "ISSUE-05",
+          "impacted_team": "Marketing & Growth Analytics",
+          "description": "VIP and Corporate customers must have telephone numbers"
+        }
+      },
+      "result": {
+        "element_count": 621,
+        "unexpected_count": 160,
+        "unexpected_percent": 25.76,
+        "observed_value": "160 nulls in 621 conditioned rows"
+      }
+    },
+    {
+      "success": false,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_match_regex",
+        "kwargs": {
+          "column": "postal_code",
+          "regex": "^\\d{5}(-\\d{4})?$",
+          "condition_column": "country_code",
+          "condition_value": "US"
+        },
+        "meta": {
+          "dimension": "accuracy",
+          "severity": "LOW",
+          "issue_id": "ISSUE-16",
+          "impacted_team": "Marketing & Growth Analytics",
+          "description": "US postal codes must conform to standard 5-digit or 9-digit ZIP regex"
+        }
+      },
+      "result": {
+        "element_count": 1879,
+        "unexpected_count": 78,
+        "unexpected_percent": 4.15,
+        "observed_value": "78 non-conforming regex patterns"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "column": "customer_segment",
+          "value_set": [
+            "Consumer",
+            "Corporate",
+            "Small Business",
+            "VIP"
+          ]
+        },
+        "meta": {
+          "dimension": "accuracy",
+          "severity": "MEDIUM",
+          "description": "Segment must belong to allowed business categories"
+        }
+      },
+      "result": {
+        "element_count": 2500,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "0 unexpected values outside allowed set"
+      }
+    },
+    {
+      "success": true,
+      "expectation_config": {
+        "expectation_type": "expect_column_values_to_be_in_set",
+        "kwargs": {
+          "column": "status",
+          "value_set": [
+            "Active",
+            "Inactive",
+            "Suspended"
+          ]
+        },
+        "meta": {
+          "dimension": "accuracy",
+          "severity": "MEDIUM",
+          "description": "Customer status must be within allowed enum values"
+        }
+      },
+      "result": {
+        "element_count": 2500,
+        "unexpected_count": 0,
+        "unexpected_percent": 0.0,
+        "observed_value": "0 unexpected values outside allowed set"
+      }
+    }
+  ]
+}
