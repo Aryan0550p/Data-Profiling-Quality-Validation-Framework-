@@ -78,11 +78,11 @@ The framework continuously validates the pipeline against 4 core dimensions:
 
 ```
 +---------------------------------------------------------------------------------------------------+
-| 1. COMPLETENESS (Missingness & Null Rates)                                                         |
+| 1. COMPLETENESS (Missingness & Null Rates)                                                        |
 |  - ISSUE-01: Null customer emails (5.0% nulls) in dim_customers.                                  |
-|  - ISSUE-02: Orders with missing customer_id (4.0% null rate) in fct_orders.                       |
+|  - ISSUE-02: Orders with missing customer_id (4.0% null rate) in fct_orders.                      |
 |  - ISSUE-03: Delivered shipments missing delivered_date (6.2% null rate) in fct_shipments.        |
-|  - ISSUE-04: Inventory records missing reorder_point safety stock (7.0% nulls) in fct_inventory.   |
+|  - ISSUE-04: Inventory records missing reorder_point safety stock (7.0% nulls) in fct_inventory.  |
 |  - ISSUE-05: Missing phone numbers for VIP/Corporate accounts in dim_customers.                   |
 |  - ISSUE-06: Settled Success payments missing gateway_transaction_id in fct_payments.             |
 +---------------------------------------------------------------------------------------------------+
@@ -106,7 +106,7 @@ The framework continuously validates the pipeline against 4 core dimensions:
 |  - ISSUE-19: Extreme monetary outlier ($9,999,999.00 simulated QA load test record).              |
 |  - ISSUE-20: Degenerate zero-variance column: warehouse_id is 100% constant 'WH-DEFAULT'.         |
 |  - ISSUE-21: Extreme resolution duration outliers (> 30 days) in customer support tickets.        |
-|  - ISSUE-22: Extreme physical weight outlier (5,000 kg phone accessories due to grams error).      |
+|  - ISSUE-22: Extreme physical weight outlier (5,000 kg phone accessories due to grams error).     |
 |  - ISSUE-23: Bimodal $0.01 micro-discount clustering spike from checkout penny rounding.          |
 +---------------------------------------------------------------------------------------------------+
 ```
