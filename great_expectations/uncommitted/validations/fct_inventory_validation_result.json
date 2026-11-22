@@ -2,9 +2,9 @@
   "evaluation_parameters": {},
   "meta": {
     "expectation_suite_name": "fct_inventory_quality_suite",
-    "run_id": "RUN-20261122T132543Z",
+    "run_id": "RUN-20261122T132951Z",
     "dataset_name": "fct_inventory",
-    "validation_time": "2026-11-22T13:25:44.007573"
+    "validation_time": "2026-11-22T13:29:52.433136"
   },
   "success": false,
   "statistics": {

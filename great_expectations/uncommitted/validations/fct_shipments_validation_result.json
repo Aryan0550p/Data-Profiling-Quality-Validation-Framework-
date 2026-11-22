@@ -2,9 +2,9 @@
   "evaluation_parameters": {},
   "meta": {
     "expectation_suite_name": "fct_shipments_quality_suite",
-    "run_id": "RUN-20261122T132543Z",
+    "run_id": "RUN-20261122T132951Z",
     "dataset_name": "fct_shipments",
-    "validation_time": "2026-11-22T13:25:43.997152"
+    "validation_time": "2026-11-22T13:29:52.269591"
   },
   "success": false,
   "statistics": {

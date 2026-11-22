@@ -2,9 +2,9 @@
   "evaluation_parameters": {},
   "meta": {
     "expectation_suite_name": "dim_customers_quality_suite",
-    "run_id": "RUN-20261122T132543Z",
+    "run_id": "RUN-20261122T132951Z",
     "dataset_name": "dim_customers",
-    "validation_time": "2026-11-22T13:25:43.890577"
+    "validation_time": "2026-11-22T13:29:51.673209"
   },
   "success": false,
   "statistics": {
